@@ -85,5 +85,5 @@ echo $hostname
 #TODO: cleanup init file ec2_stanbol_init.sh.gz
 
 #Associate with our stanbol-dev elastic ip address
-#retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --public-ip 107.21.228.130`
-#echo "ASSOCIATE ELASTIC IP ADDRESS RETURNED: $retval"
+retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --public-ip 54.197.229.87`
+echo "ASSOCIATE ELASTIC IP ADDRESS RETURNED: $retval"

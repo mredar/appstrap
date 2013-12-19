@@ -45,7 +45,7 @@ chmod 700 ~stanbol/init.sh
 cat > ~stanbol/init.sh <<EOSETUP
 #!/usr/bin/env bash
 cd
-git clone https://github.com/mredar/appstrap.git
+git clone -b stanbol https://github.com/mredar/appstrap.git
 ./appstrap/stacks/stack_stanbol #want this to finish, so below works
 EOSETUP
 su - stanbol -c ~stanbol/init.sh
