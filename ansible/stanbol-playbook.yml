@@ -1,0 +1,20 @@
+---
+-   hosts: localhost
+    connection: local
+    gather_facts: True         
+    vars:
+      dir_code_src: '~/code/'
+      dir_servers: '~/servers/'
+    tasks:
+    - name: check_appstrap
+      shell: . $HOME/appstrap/setenv.sh
+    - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
+    - name: put bashrc in place, with fix for Amazon certs if necessary
+      template: src=./templates/stanbol/bashrc.j2 dest=~/.bashrc
+    - name: put gitconfig in place
+      template: src=./templates/stanbol/gitconfig.j2 dest=~/.gitconfig
+    - include: tasks/stanbol/monit_setup.yml
+    - name: create init.d-monit
+      template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit
+    - name: monit validate
+      shell: monit validate

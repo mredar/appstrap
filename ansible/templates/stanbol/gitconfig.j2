@@ -1,0 +1,11 @@
+[alias]
+  st = status
+  ci = commit
+  br = branch
+  co = checkout
+  df = diff
+  lg = log -p
+{% if ansible_os_family|lower == 'redhat' %}
+[http]
+  sslCAInfo = /etc/ssl/certs/ca-bundle.crt
+{% endif %}
