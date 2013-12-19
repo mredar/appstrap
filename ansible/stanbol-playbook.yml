@@ -13,6 +13,7 @@
       template: src=./templates/stanbol/bashrc.j2 dest=~/.bashrc
     - name: put gitconfig in place
       template: src=./templates/stanbol/gitconfig.j2 dest=~/.gitconfig
+    - include: tasks/stanbol/install_stanbol.yml
     - include: tasks/stanbol/monit_setup.yml
     - name: create init.d-monit
       template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit

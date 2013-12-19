@@ -34,7 +34,6 @@ echo "--------------------------------"
 pip install lxml
 pip install twill
 ../jpache --prefix=${HOME}/java -f
-../java/grab-stanbol.sh
 
 . monit_binary
 
