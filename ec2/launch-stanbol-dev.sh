@@ -49,6 +49,7 @@ command="aws ec2 run-instances
      --instance-type $EC2_SIZE                       
      --count 1:1                                   
      --image-id $AMI_EBS                             
+     --block-device-mappings file://stanbol-ebs.json
      --user-data file://ec2_stanbol_init.sh.gz
      --key-name UCLDC_keypair_0
      --security-groups Solr
