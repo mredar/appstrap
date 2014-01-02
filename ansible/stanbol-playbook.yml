@@ -5,6 +5,7 @@
     vars:
       dir_code_src: '~/code/'
       dir_servers: '~/servers/'
+      maven_version: '3.0.5' # maven version to use
     tasks:
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh

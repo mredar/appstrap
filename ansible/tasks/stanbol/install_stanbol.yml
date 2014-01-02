@@ -1,9 +1,8 @@
 ---
     - name: get stanbol repo
       subversion: repo=http://svn.apache.org/repos/asf/stanbol/trunk dest={{ dir_code_src }}/stanbol
-    - name: set maven opts
-      set_fact: MAVEN_OPTS="-Xmx1024M -XX:MaxPermSize=256M"
     - name: echo opts
       shell: echo "MAVEN OPTS $MAVEN_OPTS" > out.txt
     - name: build stanbol
-      shell: chdir=~/code/stanbol ~/java/apache-maven/bin/mvn  -DskipTests clean install
+      shell: chdir={{ role_home_dir.stdout }}/code/stanbol {{ role_home_dir.stdout }}/java/apache-maven-{{ maven_version }}/bin/mvn -DskipTests clean install
+      
