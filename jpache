@@ -27,9 +27,15 @@ def main(argv=None):
     parser.add_argument('-p', '--prefix', required=True)
     parser.add_argument('-t', '--tempdir', required=False)
     parser.add_argument('-f', '--force', action='store_true', required=False)
+    parser.add_argument('-k', '--package', dest='package_override', required=False,
+			help='package definition in form "<url>,<pkg-name>"')
 
     if argv is None:
         argv = parser.parse_args()
+
+    if argv.package_override:
+        package = argv.package_override.split(',')
+        packages = [ package ]
 
     if os.path.isfile(os.path.join(argv.prefix,'apache-ant','bin','ant')) and not argv.force:
         print "been done? use -f/--force to force rebuild"

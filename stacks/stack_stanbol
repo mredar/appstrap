@@ -34,6 +34,7 @@ echo "--------------------------------"
 pip install lxml
 pip install twill
 ../jpache --prefix=${HOME}/java -f
+../jpache --prefix=${HOME}/java -f --package http://maven.apache.org/download.cgi,apache-maven-3.0.5
 
 . monit_binary
 
