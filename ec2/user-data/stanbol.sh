@@ -20,6 +20,11 @@ yum -y install git
 
 # handles pkgsrc requirements
 yum -y groupinstall "Development Tools"
+# problem with new setuptools & pip. Need to remove earlier distribute
+# and setuptools manually then install setuptools > 2 (Jan. 03, 2014)
+rm -rf /usr/lib/python2.6/site-packages/distribute*
+rm -rf /usr/lib/python2.6/site-packages/setuptools*
+wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
 easy_install pip
 pip install virtualenv
 
