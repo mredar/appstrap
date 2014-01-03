@@ -30,6 +30,8 @@ if [ -e $HOME/.bashrc-${user} ]; then
   . "$HOME/.bashrc-${user}"
 fi
 
+export MAVEN_OPTS="-Xmx2048M -XX:MaxPermSize=1024M"
+
 {% if ansible_os_family|lower == 'redhat' %}
 #fix for non-standard ca-bundle location on redhat
 export CURL_CA_BUNDLE=/etc/ssl/certs/ca-bundle.crt
