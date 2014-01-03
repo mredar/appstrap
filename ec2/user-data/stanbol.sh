@@ -14,6 +14,9 @@ set -o errexit   ## set -e : exit the script if any statement returns a non-true
 # install packages we need from amazon's repo
 yum -y update			# get the latest security updates
 
+# make sure we use all the attached storage
+resize2fs /dev/xvda1
+
 # install the rest of the software we need
 # git is needed for the build
 yum -y install git 
