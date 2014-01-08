@@ -14,6 +14,8 @@
       url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
       url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
     tasks:
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+      when: tenant_name == None
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
