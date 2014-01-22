@@ -18,7 +18,7 @@ EC2_SIZE="t1.micro"
 EC2_REGION=us-east-1
 cd $DIR
 
-cat user-data/nginx-proxy.sh > ec2_nginx-proxy_init.sh
+cat user-data/nginx-front-end-proxy.sh > ec2_nginx-proxy_init.sh
 
 # only on the t1.micro, tune swap
 if [ "$EC2_SIZE" == 't1.micro' ]; then
@@ -84,6 +84,6 @@ echo $hostname
 #TODO: cleanup init file ec2_nginx-proxy_init.sh.gz
 
 #Associate with our aspace front end elastic ip address
-retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --public-ip 54.205.165.182`
+retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --public-ip 184.72.236.50`
 echo "ASSOCIATE ELASTIC IP ADDRESS RETURNED: $retval"
 
