@@ -45,6 +45,7 @@ su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucl
 cd
 git clone https://github.com/mredar/appstrap.git
 pushd appstrap/ansible
+git checkout aspace
 pwd
 if [[ ! -d bin ]]; then
   ./init.sh
