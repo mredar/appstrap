@@ -19,29 +19,19 @@ yum -y update			# get the latest security updates
 # git is needed for the build
 yum -y install git 
 
-#### handles pkgsrc requirements
+
 yum -y groupinstall "Development Tools"
+yum -y install python-devel
 easy_install pip
 pip install virtualenv
 
 ###pip install boto_rsync      # put this in the system python
 ###pip install awscli  #not sure what version is installed on ec2 image - there is
-#no aws executable
-###yum -y install python-devel  # needed to install(init?) virtualenv with local python
-###yum -y install ncurses-devel # needed to install pkgsrc python
-###yum -y install dialog
-###yum -y install openssl-devel
-###yum -y install libjpeg-devel
-###yum -y install freetype-devel
-###yum -y install libtiff-devel
-###yum -y install lcms-devel
-###yum install -y readline-devel libyaml-devel libffi-devel #needed for rvm
 yum install -y nginx
-yum install -y monit
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
-# copy files?????
+su - ec2-user -c "cat >> ~/init.sh <<%%%
 cd
 git clone https://github.com/mredar/appstrap.git
 pushd appstrap/ansible
@@ -53,25 +43,13 @@ fi
 set +u
 . bin/activate
 set -u
-ansible-playbook -i host_inventory nginx-front-end-proxy-playbook.yml
+sudo ansible-playbook -i host_inventory nginx-front-end-proxy-playbook.yml
 ls
+%%%
+"
+su - ec2-user -c "chmod u+x ~/init.sh"
+
+su - ec2-user -c "~/init.sh"
 
 chkconfig nginx on
-
-#chkconfig monit on
-###useradd solr
-###touch ~solr/init.sh
-###chown solr:solr ~solr/init.sh
-###chmod 700 ~solr/init.sh
-#### write the file
-###cat > ~solr/init.sh <<EOSETUP
-####!/usr/bin/env bash
-###cd
-###git clone https://github.com/mredar/appstrap.git
-###./appstrap/stacks/stack_solr #want this to finish, so below works
-###EOSETUP
-###su - solr -c ~solr/init.sh
-###rm ~solr/init.sh 
-###cp ~solr/init.d-monit /etc/init.d/monit
-###chmod 0755 /etc/init.d/monit
-###chkconfig --add monit
+/etc/init.d/nginx start
