@@ -1,0 +1,34 @@
+---
+- name: link software directory to new tenant dir
+  shell: ln -s {{ dir_aspace_root }}/archivesspace/software/stable/ {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable
+- name: link software to root tenant dir
+  shell: ln -s {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/* {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software gems to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/gems/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software launcher to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/launcher/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software lib to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/lib/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software locales to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/locales/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software plugins to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/plugins/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software scripts to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/scripts/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## - name: link software stylesheets to root tenant dir
+##   shell: ln -s "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable/stylesheets/" {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/
+## 
+####clustering
+####gems
+####launcher
+####lib
+####locales
+####plugins
+####scripts
+####stylesheets
+####wars
+####
+- name: remove links to custom directories
+  shell: rm -f {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/data {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/logs {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config
+- name: remake logs and data and config
+  shell: mkdir -p {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/{logs,data,config}
