@@ -1,0 +1,12 @@
+---
+#### Use --extra-vars "tenant_name=<new tenant name>" to the
+#ansible-playbook call to set new tenant name
+-   hosts: localhost
+    connection: local
+    gather_facts: True         
+    tasks:
+    - name: check_appstrap
+      shell: . $HOME/appstrap/setenv.sh
+    - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
+    - name: move nginx conf in place
+      template: src=templates/nginx/nginx.conf.j2 dest=/etc/nginx backup=yes
