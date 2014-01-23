@@ -47,7 +47,7 @@ http {
         #charset koi8-r;
 
         #access_log  /var/log/nginx/host.access.log  main;
-        rewrite      ^ https://$server_name$request_uri? permanent;
+        return 301 https://$host$request_uri;
 
 #        location / {
 #            root   /usr/share/nginx/html;
