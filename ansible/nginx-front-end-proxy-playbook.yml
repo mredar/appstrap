@@ -1,6 +1,4 @@
 ---
-#### Use --extra-vars "tenant_name=<new tenant name>" to the
-#ansible-playbook call to set new tenant name
 -   hosts: localhost
     connection: local
     gather_facts: True         
