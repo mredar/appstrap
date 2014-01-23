@@ -30,6 +30,12 @@ pip install virtualenv
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
+cd /tmp
+wget https://github.com/archivesspace/archivesspace/archive/master.zip .
+unzip -x archivesspace-master.zip
+sed -i 's,/aspace,/home/aspace,' ./master/archivesspace/clustering/files/aspace-cluster.init  > /etc/init.d/aspace-cluster
+rm -rf ./master
+
 useradd aspace
 touch ~aspace/init.sh
 chown aspace:aspace ~aspace/init.sh
@@ -48,6 +54,8 @@ fi
 . ./bin/activate
 ansible-playbook -i host_inventory aspace-cluster-playbook.yml
 EOSETUP
+
+chkconfig --add aspace-cluster
 
 su - aspace -c ~aspace/init.sh
 rm ~aspace/init.sh 
