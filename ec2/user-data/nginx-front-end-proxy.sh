@@ -40,16 +40,15 @@ pwd
 if [[ ! -d bin ]]; then
   ./init.sh
 fi
-set +u
-. bin/activate
-set -u
-sudo ansible-playbook -i host_inventory nginx-front-end-proxy-playbook.yml
-ls
 %%%
 "
 su - ec2-user -c "chmod u+x ~/init.sh"
+su - ec2-user -c "~/init.sh" #setups ansible
+set +u
+. /home/ec2-user/appstrap/ansible/bin/activate
+set -u
 
-su - ec2-user -c "~/init.sh"
+ansible-playbook -i /home/ec2-user/appstrap/ansible/host_inventory /home/ec2-user/appstrap/ansible/nginx-front-end-proxy-playbook.yml
 
 chkconfig nginx on
 /etc/init.d/nginx start

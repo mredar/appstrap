@@ -5,9 +5,6 @@
     connection: local
     gather_facts: True         
     tasks:
-    - name: check_appstrap
-      shell: . $HOME/appstrap/setenv.sh
-    - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
     - name: move nginx conf in place
     #sudo: yes
       template: src=templates/nginx/nginx.conf.j2 dest=/etc/nginx backup=yes
