@@ -2,18 +2,26 @@
 -   hosts: localhost
     connection: local
     gather_facts: True         
+    vars:
+      aspace_version: 1.0.4
     tasks:
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
     - name: make code src directory
       file: path={{ role_home_dir.stdout }}/code/aspace state=directory
-    - name: download archivespace.zip
-      get_url: url=https://github.com/archivesspace/archivesspace/archive/master.zip dest={{ role_home_dir.stdout }}/code/archivesspace.zip
+    - name: download archivespace.zip current release
+      get_url: url=https://github.com/archivesspace/archivesspace/releases/download/v{{aspace_version}}/archivesspace-v{{aspace_version}}.zip dest={{ role_home_dir.stdout }}/code/archivesspace-v{{aspace_version}}.zip
     - name: unpack archivesspace
-      unarchive: src={{ role_home_dir.stdout }}/code/archivesspace.zip dest={{ role_home_dir.stdout }}/code/aspace/
+      unarchive: src={{ role_home_dir.stdout }}/code/archivesspace-v{{aspace_version}}.zip dest={{ role_home_dir.stdout }}/code/aspace/
 # NEED TO MAKE /aspace to mimic nfs mount?
     - name: Create cluster root dir
       file: path={{ role_home_dir.stdout }}/aspace state=directory
     - name: copy archivesspace files
-      synchronize: src={{ role_home_dir.stdout }}/code/aspace/archivesspace-master/clustering/files/ dest={{ role_home_dir.stdout }}/aspace/ recursive=yes
+      synchronize: src={{ role_home_dir.stdout }}/code/aspace/archivesspace/clustering/files/ dest={{ role_home_dir.stdout }}/aspace/ recursive=yes
+    - name: copy full current software stack
+      synchronize: src={{ role_home_dir.stdout }}/code/aspace/archivesspace/ dest={{ role_home_dir.stdout }}/aspace/software/archivesspace-{{aspace_version}} recursive=yes
+    - name: links current as stable version
+      file: src={{ role_home_dir.stdout }}/aspace/software/archivesspace-{{aspace_version}} dest={{ role_home_dir.stdout }}/aspace/software/stable state=link
+    - name: get mysql connector
+    get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ role_home_dir.stdout }}/aspace/software/stable/lib
