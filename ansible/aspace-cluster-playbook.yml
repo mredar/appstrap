@@ -19,9 +19,11 @@
       file: path={{ role_home_dir.stdout }}/aspace state=directory
     - name: copy archivesspace files
       synchronize: src={{ role_home_dir.stdout }}/code/aspace/archivesspace/clustering/files/ dest={{ role_home_dir.stdout }}/aspace/ recursive=yes
+    - name: make software source dir as per clustering instructions
+      file: path={{ role_home_dir.stdout }}/aspace/software/ state=directory
     - name: copy full current software stack
       synchronize: src={{ role_home_dir.stdout }}/code/aspace/archivesspace/ dest={{ role_home_dir.stdout }}/aspace/software/archivesspace-{{aspace_version}} recursive=yes
     - name: links current as stable version
       file: src={{ role_home_dir.stdout }}/aspace/software/archivesspace-{{aspace_version}} dest={{ role_home_dir.stdout }}/aspace/software/stable state=link
     - name: get mysql connector
-    get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ role_home_dir.stdout }}/aspace/software/stable/lib
+      get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ role_home_dir.stdout }}/aspace/software/stable/lib
