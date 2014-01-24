@@ -22,6 +22,7 @@ yum -y install git
 
 yum -y groupinstall "Development Tools"
 yum -y install python-devel
+yum -y install MySQL-python
 easy_install pip
 pip install virtualenv
 

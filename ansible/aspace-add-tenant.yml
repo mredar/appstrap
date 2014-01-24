@@ -29,9 +29,9 @@
     - include: tasks/generate_aspace_secrets.yml
     #- name: create tenant group
     #  command: sudo /usr/sbin/groupadd {{ tenant_name }}
-    - name: create tenant user
-      command: sudo /usr/sbin/useradd {{ tenant_name }}
-      ignore_errors: yes
+#    - name: create tenant user
+#      command: sudo /usr/sbin/useradd {{ tenant_name }}
+#      ignore_errors: yes
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
     - name: create mysql database
       mysql_db: name={{ tenant_name }} encoding='utf8' login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }}
