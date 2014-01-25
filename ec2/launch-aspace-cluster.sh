@@ -49,7 +49,7 @@ command="aws ec2 run-instances
      --image-id $AMI_EBS                             
      --user-data file://ec2_aspace_cluster_init.sh.gz
      --key-name UCLDC_keypair_0
-     --security-groups frontEndWeb
+     --security-groups quick-start-1
      --iam-instance-profile Name=s3-readonly"
 
 echo "ec2 launch command $command"
