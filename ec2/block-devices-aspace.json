@@ -1,0 +1,12 @@
+[
+    {
+         "VirtualName": "/aspace",
+         "DeviceName": "/dev/sdb",
+         "Ebs": {
+            "VolumeSize": 48,
+            "DeleteOnTermination": true,
+            "VolumeType": "standard"
+         }
+    }
+]
+

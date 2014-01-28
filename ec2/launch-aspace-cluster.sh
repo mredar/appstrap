@@ -17,6 +17,8 @@ EC2_SIZE="m1.small"
 EC2_REGION=us-east-1
 cd $DIR
 
+zone=`cat placement.json|jq '.AvailabilityZone' -r`
+
 cat user-data/aspace-cluster.sh > ec2_aspace_cluster_init.sh
 
 # only on the t1.micro, tune swap
@@ -40,6 +42,7 @@ fi
 
 gzip ec2_aspace_cluster_init.sh
 
+
 command="aws ec2 run-instances 
      --region $EC2_REGION 
      --monitoring file://monitoring.json
@@ -50,14 +53,18 @@ command="aws ec2 run-instances
      --user-data file://ec2_aspace_cluster_init.sh.gz
      --key-name UCLDC_keypair_0
      --security-groups quick-start-1
+     --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
 echo "ec2 launch command $command"
 
 # launch an ec2 and grab the instance id
-instance=`$command | jq '.Instances[0] | .InstanceId' -r`
+ret_val_launch=`$command`
+instance=`echo $ret_val_launch | jq '.Instances[0] | .InstanceId' -r`
+zone=`echo $ret_val_launch | jq '.Instances[0] | .Placement | .AvailabilityZone' -r`
 
 echo "DONE WITH INSTANCE LAUNCH: $instance"
+echo "Availability zone=$zone"
 
 name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=Aspace-cluster Key=project,Value=aspace"
 tags=`$name_cmd`

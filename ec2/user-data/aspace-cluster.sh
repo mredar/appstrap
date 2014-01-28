@@ -26,8 +26,42 @@ yum -y install MySQL-python
 easy_install pip
 pip install virtualenv
 
-###pip install boto_rsync      # put this in the system python
-###pip install awscli  #not sure what version is installed on ec2 image - there is
+pip install boto_rsync      # put this in the system python
+pip install awscli  #not sure what version is installed on ec2 image - there is
+
+#######echo "ZONEGET NEXT"
+#######
+#######zone=`wget -q -O -  http://169.254.169.254/latest/meta-data/placement/availability-zone`
+#######oneshorter=${#zone}-1
+#######region=${zone:0:$oneshorter}
+#######echo "ZONE=> $zone, REGION=> $region"
+#######
+######## create a volume and attach. Put /aspace & /aspace.local on this attached volume
+#######command="aws ec2 create-volume
+#######     --region $region
+#######     --availability-zone $zone
+#######     --size 32"
+#######
+#######echo "ebs volume create command $command"
+#######volume=`$command | jq '.VolumeId' -r`
+#######echo $volume
+#######
+#######this_instance=`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`
+#######
+#######command="aws ec2 attach-volume
+#######     --volume-id $volume
+#######     --instance-id $this_instance
+#######     --device /dev/sdb"
+#######attach=`$command`
+#######
+#mount attached ebs
+mkfs -t ext4 /dev/sdb
+mkdir /aspace
+mount /dev/sdb /aspace
+mkdir /aspace.local
+#######
+cp /etc/fstab /etc/fstab.orig
+echo "/dev/sdb  /aspace ext4 defaults 0 2" >> /etc/fstab 
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
