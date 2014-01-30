@@ -32,9 +32,10 @@ pip install awscli  #not sure what version is installed on ec2 image - there is
 #mount attached ebs
 mkfs -t ext4 /dev/sdb
 mkdir /aspace
-chmod +w /aspace
 mount /dev/sdb /aspace
+chmod a+w /aspace
 mkdir /aspace.local #on root ebs is this OK?
+chmod a+w /aspace.local
 #######
 cp /etc/fstab /etc/fstab.orig
 echo "/dev/sdb  /aspace ext4 defaults 0 2" >> /etc/fstab 

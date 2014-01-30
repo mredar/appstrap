@@ -14,7 +14,7 @@
     - name: download archivespace.zip current release
       get_url: url=https://github.com/archivesspace/archivesspace/releases/download/v{{aspace_version}}/archivesspace-v{{aspace_version}}.zip dest=/home/ec2-user/code/archivesspace-v{{aspace_version}}.zip
     - name: unpack archivesspace
-      unarchive: src=/home/ec2-user/code/archivesspace-v{{aspace_version}}.zip dest={{ aspace_dir }}/
+      unarchive: src=/home/ec2-user/code/archivesspace-v{{aspace_version}}.zip dest=/home/ec2-user/code/aspace
 # NEED TO MAKE {{ aspace_dir }} to mimic nfs mount?
 #    - name: Create cluster root dir
 #      file: path={{ aspace_dir }} state=directory
