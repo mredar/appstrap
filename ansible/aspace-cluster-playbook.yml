@@ -4,26 +4,27 @@
     gather_facts: True         
     vars:
       aspace_version: 1.0.4
+      aspace_dir: /aspace
     tasks:
     - name: check_appstrap
       shell: . /home/ec2-user/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets /home/ec2-user/
     - name: make code src directory
-      file: path=/home/ec2-user//code/aspace state=directory
+      file: path=/home/ec2-user/code/aspace state=directory
     - name: download archivespace.zip current release
-      get_url: url=https://github.com/archivesspace/archivesspace/releases/download/v{{aspace_version}}/archivesspace-v{{aspace_version}}.zip dest=/home/ec2-user//code/archivesspace-v{{aspace_version}}.zip
+      get_url: url=https://github.com/archivesspace/archivesspace/releases/download/v{{aspace_version}}/archivesspace-v{{aspace_version}}.zip dest=/home/ec2-user/code/archivesspace-v{{aspace_version}}.zip
     - name: unpack archivesspace
-      unarchive: src=/home/ec2-user//code/archivesspace-v{{aspace_version}}.zip dest=/home/ec2-user//code/aspace/
-# NEED TO MAKE /aspace to mimic nfs mount?
-    - name: Create cluster root dir
-      file: path=/home/ec2-user//aspace state=directory
+      unarchive: src=/home/ec2-user/code/archivesspace-v{{aspace_version}}.zip dest={{ aspace_dir }}/
+# NEED TO MAKE {{ aspace_dir }} to mimic nfs mount?
+#    - name: Create cluster root dir
+#      file: path={{ aspace_dir }} state=directory
     - name: copy archivesspace files
-      synchronize: src=/home/ec2-user//code/aspace/archivesspace/clustering/files/ dest=/home/ec2-user//aspace/ recursive=yes
+      synchronize: src=/home/ec2-user/code/aspace/archivesspace/clustering/files/ dest={{ aspace_dir }}/ recursive=yes
     - name: make software source dir as per clustering instructions
-      file: path=/home/ec2-user//aspace/software/ state=directory
+      file: path={{ aspace_dir }}/software/ state=directory
     - name: copy full current software stack
-      synchronize: src=/home/ec2-user//code/aspace/archivesspace/ dest=/home/ec2-user//aspace/software/archivesspace-{{aspace_version}} recursive=yes
+      synchronize: src=/home/ec2-user/code/aspace/archivesspace/ dest={{ aspace_dir }}/software/archivesspace-{{aspace_version}} recursive=yes
     - name: links current as stable version
-      file: src=/home/ec2-user//aspace/software/archivesspace-{{aspace_version}} dest=/home/ec2-user//aspace/software/stable state=link
+      file: src={{ aspace_dir }}/software/archivesspace-{{aspace_version}} dest={{ aspace_dir }}/software/stable state=link
     - name: get mysql connector
-      get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest=/home/ec2-user//aspace/software/stable/lib
+      get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ aspace_dir }}/software/stable/lib
