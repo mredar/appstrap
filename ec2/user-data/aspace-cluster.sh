@@ -41,9 +41,9 @@ echo "/dev/sdb  /aspace ext4 defaults 0 2" >> /etc/fstab
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 ##useradd aspace
-##touch ~aspace/init.sh
-##chown aspace:aspace ~aspace/init.sh
-##chmod +x ~aspace/init.sh
+touch ~ec2-user/init.sh
+chown ec2-user:ec2-user ~ec2-user/init.sh
+chmod +x ~ec2-user/init.sh
 # write the file
 cat > /home/ec2-user/init.sh <<EOSETUP
 #!/usr/bin/env bash
@@ -58,6 +58,7 @@ fi
 . ./bin/activate
 ansible-playbook -i host_inventory aspace-cluster-playbook.yml
 EOSETUP
+
 
 su - ec2-user -c /home/ec2-user/init.sh
 

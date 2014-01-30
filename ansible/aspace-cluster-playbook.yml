@@ -6,7 +6,7 @@
       aspace_version: 1.0.4
     tasks:
     - name: check_appstrap
-    shell: . /home/ec2-user/appstrap/setenv.sh
+      shell: . /home/ec2-user/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets /home/ec2-user/
     - name: make code src directory
       file: path=/home/ec2-user//code/aspace state=directory
