@@ -33,9 +33,9 @@ pip install awscli  #not sure what version is installed on ec2 image - there is
 mkfs -t ext4 /dev/sdb
 mkdir /aspace
 mount /dev/sdb /aspace
-chmod a+w /aspace
+chown ec2-user:ec2-user /aspace
 mkdir /aspace.local #on root ebs is this OK?
-chmod a+w /aspace.local
+chown  ec2-user:ec2-user /aspace.local
 #######
 cp /etc/fstab /etc/fstab.orig
 echo "/dev/sdb  /aspace ext4 defaults 0 2" >> /etc/fstab 
@@ -64,7 +64,7 @@ EOSETUP
 
 su - ec2-user -c /home/ec2-user/init.sh
 
-cp /home/ec2-user/aspace/aspace-cluster.init /etc/init.d/aspace-cluster
+cp /aspace/aspace-cluster.init /etc/init.d/aspace-cluster
 chmod +x /etc/init.d/aspace-cluster
 chkconfig --add aspace-cluster
 
