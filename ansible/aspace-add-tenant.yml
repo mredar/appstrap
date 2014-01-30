@@ -10,7 +10,7 @@
       db_user: 'dsc_mysql_admin'
       dir_code_src: '~/code/'
       dir_servers: '~/servers/'
-      dir_aspace_root: '~/aspace/'
+      dir_aspace_root: '/aspace/'
       url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
       url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
     tasks:
