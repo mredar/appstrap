@@ -5,9 +5,9 @@
     connection: local
     gather_facts: True         
     vars:
-      db_server: 'dsc-aspace-dev.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
       db_port: 3306
-      db_user: 'dsc_mysql_admin'
+      db_user: 'rds_aspace_admin'
       dir_code_src: '~/code/'
       dir_servers: '~/servers/'
       dir_aspace_root: '/aspace/'
