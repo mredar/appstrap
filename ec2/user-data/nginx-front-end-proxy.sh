@@ -20,6 +20,7 @@ yum -y update			# get the latest security updates
 yum -y install git 
 yum -y install nginx
 yum -y install aws-cli
+yum -y install jq
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 

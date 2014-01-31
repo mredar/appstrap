@@ -50,7 +50,7 @@ command="aws ec2 run-instances
      --user-data file://ec2_nginx-proxy_init.sh.gz
      --key-name UCLDC_keypair_0
      --security-group-ids sg-a8f437cd
-     --iam-instance-profile Name=s3-readonly"
+     --iam-instance-profile Name=aspace-control"
 
 echo "ec2 launch command $command"
 
