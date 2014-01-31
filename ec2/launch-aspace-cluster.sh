@@ -44,15 +44,14 @@ gzip ec2_aspace_cluster_init.sh
 
 
 command="aws ec2 run-instances 
+     --subnet subnet-7355145b
      --region $EC2_REGION 
      --monitoring file://monitoring.json
-     --placement file://placement.json
      --instance-type $EC2_SIZE                       
      --count 1:1                                   
      --image-id $AMI_EBS                             
      --user-data file://ec2_aspace_cluster_init.sh.gz
      --key-name UCLDC_keypair_0
-     --security-groups quick-start-1
      --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
@@ -72,20 +71,18 @@ tags=`$name_cmd`
 echo tags
 echo "DONE WITH NAMING"
 
-# wait for the new ec2 machine to get its hostname
-hostname_cmd="aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'"
-echo "CMD $hostname_cmd"
-hostname=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'`
-echo "instance started, waiting for hostname"
-while [ "$hostname" = 'null' ]
+#machines in vpc do not get PublicDnsName
+#Wait for the state to be: "State": { "Code": 16, "Name": "running" }, 
+running=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .State | .Code'`
+echo "instance started, waiting for it to be running "
+while [ "$running" != '16' ]
   do
   sleep 15
   echo "."
-  hostname=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'` 
+  running=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .State | .Code'`
   done
 
 echo "INSTANCE:$instance"
-echo $hostname
 
 #TODO: cleanup init file ec2_aspace_cluster_init.sh.gz
 
