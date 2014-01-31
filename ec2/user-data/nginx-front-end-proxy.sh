@@ -19,7 +19,7 @@ yum -y update			# get the latest security updates
 # git is needed for the build
 yum -y install git 
 yum -y install nginx
-yum -y install awscli
+yum -y install aws-cli
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
