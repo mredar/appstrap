@@ -21,10 +21,10 @@
     - name: copy archivesspace files
       synchronize: src=/home/ec2-user/code/aspace/archivesspace/clustering/files/ dest={{ aspace_dir }}/ recursive=yes
     - name: make software source dir as per clustering instructions
-      file: path={{ aspace_dir }}/software/ state=directory
+      file: path={{ aspace_dir }}/archivesspace/software/ state=directory
     - name: copy full current software stack
-      synchronize: src=/home/ec2-user/code/aspace/archivesspace/ dest={{ aspace_dir }}/software/archivesspace-{{aspace_version}} recursive=yes
+      synchronize: src=/home/ec2-user/code/aspace/archivesspace/ dest={{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}} recursive=yes
     - name: links current as stable version
-      file: src={{ aspace_dir }}/software/archivesspace-{{aspace_version}} dest={{ aspace_dir }}/software/stable state=link
+      file: src={{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}} dest={{ aspace_dir }}/archivesspace/software/stable state=link
     - name: get mysql connector
-      get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ aspace_dir }}/software/stable/lib
+      get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ aspace_dir }}/archivesspace/software/stable/lib
