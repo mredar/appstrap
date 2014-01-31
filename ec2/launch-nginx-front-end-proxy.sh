@@ -65,24 +65,22 @@ tags=`$name_cmd`
 echo tags
 echo "DONE WITH NAMING"
 
-# wait for the new ec2 machine to get its hostname
-hostname_cmd="aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'"
-echo "CMD $hostname_cmd"
-hostname=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'`
-echo "instance started, waiting for hostname"
-while [ "$hostname" = 'null' ]
+#machines in vpc do not get PublicDnsName
+#Wait for the state to be: "State": { "Code": 16, "Name": "running" }, 
+running=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .State | .Code'`
+echo "instance started, waiting for it to be running "
+while [ "$running" != '16' ]
   do
   sleep 15
   echo "."
-  hostname=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PublicDnsName'` 
+  running=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .State | .Code'`
   done
 
 echo "INSTANCE:$instance"
-echo $hostname
 
 #TODO: cleanup init file ec2_nginx-proxy_init.sh.gz
 
 #Associate with our aspace front end elastic ip address
-retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --public-ip 184.72.236.50`
+retval=`aws ec2 associate-address --region=$EC2_REGION --instance-id $instance --allocation-id eipalloc-81928ae3` ## --public-ip 54.84.40.181`
 echo "ASSOCIATE ELASTIC IP ADDRESS RETURNED: $retval"
 
