@@ -41,15 +41,15 @@ fi
 gzip ec2_nginx-proxy_init.sh
 
 command="aws ec2 run-instances 
+     --subnet subnet-fa97b1bc
      --region $EC2_REGION 
      --monitoring file://monitoring.json
-     --placement file://placement.json
      --instance-type $EC2_SIZE                       
      --count 1:1                                   
      --image-id $AMI_EBS                             
      --user-data file://ec2_nginx-proxy_init.sh.gz
      --key-name UCLDC_keypair_0
-     --security-groups frontEndWeb
+     --security-group-ids sg-a8f437cd
      --iam-instance-profile Name=s3-readonly"
 
 echo "ec2 launch command $command"

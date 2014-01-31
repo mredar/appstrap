@@ -18,37 +18,14 @@ yum -y update			# get the latest security updates
 # install the rest of the software we need
 # git is needed for the build
 yum -y install git 
-
-
-yum -y groupinstall "Development Tools"
-yum -y install python-devel
-easy_install pip
-pip install virtualenv
-
-###pip install boto_rsync      # put this in the system python
-###pip install awscli  #not sure what version is installed on ec2 image - there is
-yum install -y nginx
+yum -y install nginx
+yum -y install awscli
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
-su - ec2-user -c "cat >> ~/init.sh <<%%%
-cd
-git clone https://github.com/mredar/appstrap.git
-pushd appstrap/ansible
-git checkout aspace
-pwd
-if [[ ! -d bin ]]; then
-  ./init.sh
-fi
-%%%
-"
-su - ec2-user -c "chmod u+x ~/init.sh"
-su - ec2-user -c "~/init.sh" #setups ansible
-set +u
-. /home/ec2-user/appstrap/ansible/bin/activate
-set -u
-
-ansible-playbook -i /home/ec2-user/appstrap/ansible/host_inventory /home/ec2-user/appstrap/ansible/nginx-front-end-proxy-playbook.yml
+su - ec2-user -c "git clone https://github.com/mredar/appstrap.git"
+su - ec2-user -c "cd appstrap; git checkout aspace"
+cp /home/ec2-user/appstrap/ansible/templates/nginx/nginx.conf.j2 /etc/nginx/nginx.conf
 
 chkconfig nginx on
 /etc/init.d/nginx start
