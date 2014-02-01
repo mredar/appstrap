@@ -1,4 +1,5 @@
 ---
+- name: run
 - name: link software directory to new tenant dir
   shell: ln -s {{ dir_aspace_root }}/archivesspace/software/stable/ {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/stable
 - name: link software to root tenant dir
