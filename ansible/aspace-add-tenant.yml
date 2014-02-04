@@ -29,14 +29,13 @@
     - include: tasks/generate_aspace_secrets.yml
     #- name: create tenant group
     #  command: sudo /usr/sbin/groupadd {{ tenant_name }}
-##    - name: create tenant user
-##      command: sudo /usr/sbin/useradd -U {{ tenant_name }}
+    - name: create tenant user
+      command: sudo /usr/sbin/useradd -U {{ tenant_name }}
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
-##    - name: create mysql database
-##      mysql_db: name={{ tenant_name }} encoding='utf8' login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }}
-##    - name: create mysql user {{ tenant_name }} with PASSWORD {{ random_pwd.stdout }}
-##      mysql_user: login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }} host='%' name={{ tenant_name }} password={{ pswd_db_user.stdout }} priv={{ tenant_name }}.*:ALL
-      #mysql_user: login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }} name={{ tenant_name }} password={{ pswd_db_user.stdout }} priv={{ tenant_name }}.*:ALL
+    - name: create mysql database
+      mysql_db: name={{ tenant_name }} encoding='utf8' login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }}
+    - name: create mysql user {{ tenant_name }} with PASSWORD {{ random_pwd.stdout }}
+      mysql_user: login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }} name={{ tenant_name }} password={{ pswd_db_user.stdout }} host=% priv={{ tenant_name }}.*:ALL
     - name: copy tenant dir template dirs to tenant dir
       shell: "cp -a {{ dir_aspace_root }}/archivesspace/tenants/_template {{ dir_aspace_root}}/archivesspace/tenants/{{ tenant_name }}"
     - name: run init_tenant
