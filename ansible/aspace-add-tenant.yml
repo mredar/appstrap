@@ -32,8 +32,6 @@
       register: pswd_db_user 
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
     - include: tasks/generate_aspace_secrets.yml
-    #- name: create tenant group
-    #  command: sudo /usr/sbin/groupadd {{ tenant_name }}
     - name: create tenant user
       command: sudo /usr/sbin/useradd -U {{ tenant_name }}
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
@@ -57,6 +55,8 @@
     - name: update starting port for next tenant
       lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 4 }}" state=present backrefs=yes
 
+    - name: save tenant information
+      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ pswd_db_user.stdout }} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
     - debug: msg="Hostname-> {{ hostname.stdout }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
