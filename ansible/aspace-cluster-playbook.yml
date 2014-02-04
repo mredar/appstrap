@@ -9,6 +9,8 @@
     - name: check_appstrap
       shell: . /home/ec2-user/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets /home/ec2-user/
+    - name: set port file
+      shell: echo 8000 > ~/.port_next_tenant
     - name: make code src directory
       file: path=/home/ec2-user/code/aspace state=directory
     - name: download archivespace.zip current release

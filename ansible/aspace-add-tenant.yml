@@ -19,9 +19,14 @@
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
+    - name: get start port
+      shell: cat ~/.port_next_tenant
+      register: start_port
     - name: get the db master password
-      shell: "cat ~/.dbpass"
+      shell: cat ~/.dbpass
       register: pswd_db_master 
+    - fail: msg='No ~/.dbpass file'
+      when: pswd_db_master == None
     - name: generate a random password for tenant db user
       shell: "cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 16"
       register: pswd_db_user 
@@ -49,4 +54,10 @@
     - name: setup tenant database
       shell: chdir={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/ ./scripts/setup-database.sh
 
+    - name: update starting port for next tenant
+      lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 4 }}" state=present backrefs=yes
+
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
+    - debug: msg="Hostname-> {{ hostname.stdout }}"
+    - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
+    - debug: msg="Archivespace frontend port-> {{ start_port.stdout }}"
