@@ -40,7 +40,7 @@ chown  ec2-user:ec2-user /aspace.local
 cp /etc/fstab /etc/fstab.orig
 echo "/dev/sdb  /aspace ext4 defaults 0 2" >> /etc/fstab 
 
-su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
+su - ec2-user -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 ##useradd aspace
 touch ~ec2-user/init.sh

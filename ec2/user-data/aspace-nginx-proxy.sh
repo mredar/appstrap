@@ -27,11 +27,11 @@ yum -y install autoconf
 yum -y install gcc
 yum -y install python-devel
 yum -y install python-pip
-yum -y install virtualenv
+pip install virtualenv
 
 
 
-su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
+su - ec2-user -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 su - ec2-user -c "git clone https://github.com/mredar/appstrap.git"
 su - ec2-user -c "cd appstrap; git checkout aspace"

@@ -35,4 +35,4 @@ yum -y install freetype-devel
 yum -y install libtiff-devel
 yum -y install lcms-devel
 
-su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
+su - ec2-user -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
