@@ -19,13 +19,23 @@ yum -y update			# get the latest security updates
 # git is needed for the build
 yum -y install git 
 yum -y install nginx
+#for launching cluster instances
 yum -y install aws-cli
 yum -y install jq
+#for ansible, to add tenants
+yum -y install autoconf
+yum -y install gcc
+yum -y install python-devel
+yum -y install python-pip
+yum -y install virtualenv
+
+
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 su - ec2-user -c "git clone https://github.com/mredar/appstrap.git"
 su - ec2-user -c "cd appstrap; git checkout aspace"
+su - ec2-user -c "~/appstrap/ansible/init.sh"
 cp /home/ec2-user/appstrap/ansible/templates/nginx/nginx.conf.j2 /etc/nginx/nginx.conf
 
 chkconfig nginx on

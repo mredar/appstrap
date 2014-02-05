@@ -59,7 +59,7 @@ instance=`$command | jq '.Instances[0] | .InstanceId' -r`
 
 echo "DONE WITH INSTANCE LAUNCH: $instance"
 
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=Aspace-front Key=project,Value=aspace"
+name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-front Key=project,Value=aspace"
 tags=`$name_cmd`
 
 echo tags
