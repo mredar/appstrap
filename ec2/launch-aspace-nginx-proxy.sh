@@ -17,7 +17,9 @@ EC2_SIZE="m1.small"
 EC2_REGION=us-east-1
 cd $DIR
 
-cat user-data/nginx-front-end-proxy.sh > ec2_nginx-proxy_init.sh
+cat user-data/aspace-nginx-proxy.sh > ec2_nginx-proxy_init.sh
+
+
 
 # only on the t1.micro, tune swap
 if [ "$EC2_SIZE" == 't1.micro' ]; then
