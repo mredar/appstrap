@@ -51,7 +51,7 @@ command="aws ec2 run-instances
      --count 1:1                                   
      --image-id $AMI_EBS                             
      --user-data file://ec2_aspace_cluster_init.sh.gz
-     --key-name UCLDC_keypair_0
+     --key-name aspace-cluster
      --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
@@ -65,7 +65,7 @@ zone=`echo $ret_val_launch | jq '.Instances[0] | .Placement | .AvailabilityZone'
 echo "DONE WITH INSTANCE LAUNCH: $instance"
 echo "Availability zone=$zone"
 
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=Aspace-cluster Key=project,Value=aspace"
+name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace"
 tags=`$name_cmd`
 
 echo tags
