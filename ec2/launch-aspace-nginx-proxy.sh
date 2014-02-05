@@ -48,8 +48,8 @@ command="aws ec2 run-instances
      --count 1:1                                   
      --image-id $AMI_EBS                             
      --user-data file://ec2_nginx-proxy_init.sh.gz
-     --key-name UCLDC_keypair_0
-     --security-group-ids sg-a8f437cd
+     --key-name aspace-majorTom
+     --security-group-ids sg-a8f437cd sg-9879b9fd
      --iam-instance-profile Name=aspace-control"
 
 echo "ec2 launch command $command"
