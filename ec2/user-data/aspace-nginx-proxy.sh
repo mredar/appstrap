@@ -32,9 +32,11 @@ pip install virtualenv
 #setup necessary users
 useradd -U mredar
 su - mredar -c 'mkdir /home/mredar/.ssh'
+su - mredar -c 'chmod 700 /home/mredar/.ssh'
 su - mredar -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 useradd -U btingle
 su - btingle -c 'mkdir /home/btingle/.ssh'
+su - btingle -c 'chmod 700 /home/btingle/.ssh'
 su - btingle -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 
