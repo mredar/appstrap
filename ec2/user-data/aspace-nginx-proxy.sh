@@ -41,6 +41,11 @@ su - tingle -c 'chmod 700 ~/.ssh'
 su - tingle -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/tingle-keys.txt >> ~/.ssh/authorized_keys'
 su - tingle -c 'chmod 600 ~/.ssh/authorized_keys'
 
+cat >> /etc/sudoers.d/ucldc-operators  << DELIM
+mredar ALL = NOPASSWD: ALL
+tingle ALL = NOPASSWD: ALL
+DELIM
+
 
 
 su - ec2-user -c 'curl https://raw.github.com/ucldc/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
