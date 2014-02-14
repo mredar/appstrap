@@ -13,7 +13,7 @@
 set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.com/questions/59895
 AMI_EBS="ami-05355a6c"
-EC2_SIZE="m1.small"
+EC2_SIZE="m3.large"
 EC2_REGION=us-east-1
 cd $DIR
 
@@ -83,6 +83,13 @@ while [ "$running" != '16' ]
   done
 
 echo "INSTANCE:$instance"
+
+#Tag volumes attached
+volumes=`aws ec2 describe-instances --region us-east-1 --instance-ids $instance |jq ' .Reservations[0] | .Instances[0] | .BlockDeviceMappings | .[] | .Ebs | .VolumeId' | tr \" \  | tr \n \  `
+
+echo "VOLUMES: $volumes"
+
+tags2=`aws ec2 create-tags --region $EC2_REGION --resources ${volumes} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace`
 
 #TODO: cleanup init file ec2_aspace_cluster_init.sh.gz
 

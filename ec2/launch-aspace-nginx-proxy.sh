@@ -80,6 +80,13 @@ while [ "$running" != '16' ]
 
 echo "INSTANCE:$instance"
 
+#Tag volumes attached
+volumes=`aws ec2 describe-instances --region us-east-1 --instance-ids $instance |jq ' .Reservations[0] | .Instances[0] | .BlockDeviceMappings | .[] | .Ebs | .VolumeId' | tr \" \  | tr \n \  `
+
+echo "VOLUMES: $volumes"
+
+tags2=`aws ec2 create-tags --region $EC2_REGION --resources ${volumes} --tags Key=Name,Value=aspace-front Key=project,Value=aspace`
+
 #TODO: cleanup init file ec2_nginx-proxy_init.sh.gz
 
 #Associate with our aspace front end elastic ip address
