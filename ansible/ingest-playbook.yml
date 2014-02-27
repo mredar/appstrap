@@ -15,9 +15,9 @@
     - name: put gitconfig in place
       template: src=./templates/ingest/gitconfig.j2 dest=~/.gitconfig
     - name: install amara
-      pip: install name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
+      pip: name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
     - name: install akara
-      pip: install name=Akara extra_args='-i http://pypi.zepheira.com/releases/index' 
+      pip: name=Akara extra_args='-i http://pypi.zepheira.com/releases/index' 
 ####    - include: tasks/ingest/monit_setup.yml
 ####    - name: create init.d-monit
 ####      template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit
