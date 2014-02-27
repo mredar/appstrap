@@ -22,7 +22,7 @@ export LD_LIBRARY_PATH="${HOME}/pkg/lib"
 # install pkgsrc packages
 ###export PKG_JVM_DEFAULT=sun-jdk7
 echo "================================PMAKE ingest.pkgsrc.txt"
-ACCEPTABLE_LICENSES=oracle-binary-code-license stack_run_batch "../pmake" ingest.pkgsrc.txt
+ACCEPTABLE_LICENSES="erlang-public-license oracle-binary-code-license" stack_run_batch "../pmake --branch pkgsrc_2013Q4" ingest.pkgsrc.txt
 if [[ ! -e ${HOME}/pkg/bin/python ]]; then
     ln -s ${HOME}/pkg/bin/python2.7 ${HOME}/pkg/bin/python
 fi
@@ -33,8 +33,8 @@ echo "--------------------------------"
 
 pip install lxml
 pip install twill
-../jpache --prefix=${HOME}/java -f
-../jpache --prefix=${HOME}/java -f --package http://maven.apache.org/download.cgi,apache-maven-3.0.5
+##../jpache --prefix=${HOME}/java -f
+##../jpache --prefix=${HOME}/java -f --package http://maven.apache.org/download.cgi,apache-maven-3.0.5
 
 . monit_binary
 
