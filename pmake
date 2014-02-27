@@ -20,13 +20,31 @@ if  ! command -v bmake >/dev/null 2>&1 ; then
     . "$DIR/setenv.sh"
 fi
 
+#see if branch option set, to pick pkgsrc branch
+# the release branches in git are named pkgsrc_<YYYY>Q<x>
+pkgsrc_branch='pkgsrc_2013Q2'
+#pkgsrc_branch=${1:-'pkgsrc_2013Q2'}
+OPTS=`getopt -o "" -l branch: -- "$@"`
+if [ $? != 0 ]
+then
+    exit 1
+fi
+eval set -- "$OPTS"
+#set
+while true ; do
+    case "$1" in
+        --branch) pkgsrc_branch=$2; echo "Got branch: $2"; shift 2;;
+        --) shift; break;
+    esac
+done
+
 # bootstrap our boostrap, if we have not been here before
 if [ ! -e "$HOME/pkgsrc" ]; then
-    echo "installing pkgsrc"
+    echo "installing pkgsrc git branch: $pkgsrc_branch"
     cd
     git clone git://github.com/jsonn/pkgsrc.git
     cd pkgsrc
-    git checkout origin/pkgsrc_2013Q2
+    git checkout origin/$pkgsrc_branch
     cd bootstrap
     tag=`git rev-parse --short --verify HEAD`  # http://stackoverflow.com/a/949391/1763984
     ./bootstrap --prefix "$HOME/pkgbld/$tag" --pkgdbdir "$HOME/pkgbld/$tag/var/db/pkg" --unprivileged
