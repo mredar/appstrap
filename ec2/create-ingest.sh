@@ -21,7 +21,6 @@ AMI_EBS="ami-bba18dd2"
 AMI_NAT="ami-4f9fee26" #Image for nat machine
 EC2_SIZE="t1.micro"
 EC2_SIZE="m1.large"
-ZONE=us-east-1b
 EC2_REGION=us-east-1
 cd $DIR
 

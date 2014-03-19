@@ -2,7 +2,7 @@
   {
     "Ebs": {
       "VolumeType": "standard",
-      "DeleteOnTermination": true,
+      "DeleteOnTermination": false,
       "VolumeSize": 48
     },
     "DeviceName": "/dev/sdb",
