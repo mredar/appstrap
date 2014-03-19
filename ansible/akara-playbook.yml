@@ -1,0 +1,18 @@
+---
+-   hosts: localhost
+    connection: local
+    gather_facts: True         
+    vars:
+      dir_code_src: '~/code/'
+      dir_servers: '~/servers/'
+    tasks:
+    - name: check_appstrap
+      shell: . $HOME/appstrap/setenv.sh
+    - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
+    - name: put bashrc in place, with fix for Amazon certs if necessary
+      template: src=./templates/akara/bashrc.j2 dest=~/.bashrc
+    - name: put gitconfig in place
+      template: src=./templates/akara/gitconfig.j2 dest=~/.gitconfig
+    - include: tasks/akara/monit_setup.yml
+    - name: monit validate
+      shell: monit validate

@@ -1,0 +1,11 @@
+[
+  {
+    "Ebs": {
+      "VolumeType": "standard",
+      "DeleteOnTermination": true,
+      "VolumeSize": 48
+    },
+    "DeviceName": "/dev/sdb",
+    "VirtualName": "/data"
+  }
+]

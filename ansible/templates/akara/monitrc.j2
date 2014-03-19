@@ -1,0 +1,16 @@
+set daemon 30
+#set logfile syslog facility log_daemon
+set logfile {{ role_home_dir.stdout }}/servers/monit/log/monit.log
+
+set httpd port 28812
+    allow localhost
+    allow 127.0.0.1
+
+check process akara
+    with pidfile "{{ role_home_dir.stdout }}/servers/akara/logs/akara.pid
+    start program "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash ?"
+    stop program "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash ?"
+    #if failed host {{ ansible_fqdn }} port 8080 #fqdn changes on restart
+    if failed URL http://localhost:8889/
+    then 
+        restart
