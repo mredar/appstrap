@@ -5,8 +5,10 @@
     vars:
       dir_code_src: '~/code/'
       dir_servers: '~/servers/'
-      maven_version: '3.0.5' # maven version to use
     tasks:
+    - name: get public ip
+      shell:  GET http://169.254.169.254/latest/meta-data/public-ipv4
+      register: public_ip
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
     - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
@@ -14,10 +16,12 @@
       template: src=./templates/ingest/bashrc.j2 dest=~/.bashrc
     - name: put gitconfig in place
       template: src=./templates/ingest/gitconfig.j2 dest=~/.gitconfig
-    - name: install amara
-      pip: name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
-    - name: install akara
-      pip: name=Akara extra_args='-i http://pypi.zepheira.com/releases/index' 
+    - name: put couch local.ini into place
+      template: src=./templates/ingest/couch-local.ini.j2 dest=~/pkg/etc/couchdb/local.ini
+###    - name: install amara
+###      pip: name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
+###    - name: install akara
+###      pip: name=Akara extra_args='-i http://pypi.zepheira.com/releases/index' 
 ####    - include: tasks/ingest/monit_setup.yml
 ####    - name: create init.d-monit
 ####      template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit
