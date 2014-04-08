@@ -18,8 +18,10 @@
       template: src=./templates/ingest/gitconfig.j2 dest=~/.gitconfig
     - name: put couch local.ini into place
       template: src=./templates/ingest/couch-local.ini.j2 dest=~/pkg/etc/couchdb/local.ini
+    - name: make home bin dir
+      file: path=~/bin state=directory
     - name: put couch init.d in place, will be copied by ec2-user
-      template: src=./templates/ingest/couchdb-init.d.j2 dest=~/couchdb-init.d
+      template: src=./templates/ingest/couchdb-init.d.j2 dest=~/bin/couchdb-init.d mode=0755
 ###    - name: install amara
 ###      pip: name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
 ###    - name: install akara

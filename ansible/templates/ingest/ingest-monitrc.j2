@@ -1,7 +1,7 @@
 check process couchdb
     with pidfile "{{ role_home_dir.stdout}}/pkg/var/run/couchdb/couchdb.pid"
-    start program = "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash {{ role_home_dir.stdout }}/couchdb-init.d start"
-    stop program  = "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash {{ role_home_dir.stdout }}/couchdb-init.d stop"
+    start program = "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash {{ role_home_dir.stdout }}/bin/couchdb-init.d start"
+    stop program  = "{{ role_home_dir.stdout }}/servers/monit/bin/monit-wrapper.bash {{ role_home_dir.stdout }}/bin/couchdb-init.d stop"
     if failed URL http://localhost:5984/
     then 
         restart
