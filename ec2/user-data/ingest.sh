@@ -43,6 +43,8 @@ yum -y install ncurses-devel # needed to install pkgsrc python
 ###yum -y install lcms-devel
 ###yum install -y readline-devel libyaml-devel libffi-devel #needed for rvm
 
+yum install nginx #will proxy and control access to couchdb
+
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
 useradd ingest
@@ -58,6 +60,8 @@ git clone -b ingest https://github.com/mredar/appstrap.git
 EOSETUP
 su - ingest -c ~ingest/init.sh
 rm ~ingest/init.sh 
+cp ~ingest/appstrap/ansible/templates/ingest/nginx.conf.j2 /etc/nginx/nginx.conf
+
 cp ~ingest/init.d-monit /etc/init.d/monit
 chmod 0755 /etc/init.d/monit
 chkconfig --add monit
