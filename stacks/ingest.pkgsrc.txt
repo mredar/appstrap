@@ -6,7 +6,8 @@ www/cronolog
 devel/git-base
 devel/git-docs
 devel/mercurial
-devel/gettext textproc/groff  # needed for perldoc to work
+devel/gettext
+### textproc/groff  # needed for perldoc to work
 textproc/p5-ack
 lang/python27
 devel/py-virtualenv

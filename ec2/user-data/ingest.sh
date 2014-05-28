@@ -39,6 +39,7 @@ yum -y install ncurses-devel # needed to install pkgsrc python
 ###yum -y install openssl-devel
 ###yum -y install libjpeg-devel
 ###yum -y install freetype-devel
+####yum -y install libz-devel
 ###yum -y install libtiff-devel
 ###yum -y install lcms-devel
 ###yum install -y readline-devel libyaml-devel libffi-devel #needed for rvm
