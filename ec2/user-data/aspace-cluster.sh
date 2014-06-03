@@ -34,7 +34,9 @@ mkfs -t ext4 /dev/sdb
 mkdir /aspace
 mount /dev/sdb /aspace
 chown ec2-user:ec2-user /aspace
-mkdir /aspace.local #on root ebs is this OK?
+mkdir /aspace/aspace.local
+chown ec2-user:ec2-user /aspace/aspace.local
+ln -s /aspace/aspace.local /aspace.local #put on bigger data disk
 chown  ec2-user:ec2-user /aspace.local
 #######
 cp /etc/fstab /etc/fstab.orig
