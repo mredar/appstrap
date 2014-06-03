@@ -17,7 +17,9 @@ EC2_SIZE="m1.small"
 EC2_REGION=us-east-1
 cd $DIR
 
-cat user-data/nginx-front-end-proxy.sh > ec2_nginx-proxy_init.sh
+cat user-data/aspace-nginx-proxy.sh > ec2_nginx-proxy_init.sh
+
+
 
 # only on the t1.micro, tune swap
 if [ "$EC2_SIZE" == 't1.micro' ]; then
@@ -59,7 +61,7 @@ instance=`$command | jq '.Instances[0] | .InstanceId' -r`
 
 echo "DONE WITH INSTANCE LAUNCH: $instance"
 
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=Aspace-front Key=project,Value=aspace"
+name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-front Key=project,Value=aspace"
 tags=`$name_cmd`
 
 echo tags
@@ -77,6 +79,13 @@ while [ "$running" != '16' ]
   done
 
 echo "INSTANCE:$instance"
+
+#Tag volumes attached
+volumes=`aws ec2 describe-instances --region us-east-1 --instance-ids $instance |jq ' .Reservations[0] | .Instances[0] | .BlockDeviceMappings | .[] | .Ebs | .VolumeId' | tr \" \  | tr \n \  `
+
+echo "VOLUMES: $volumes"
+
+tags2=`aws ec2 create-tags --region $EC2_REGION --resources ${volumes} --tags Key=Name,Value=aspace-front Key=project,Value=aspace`
 
 #TODO: cleanup init file ec2_nginx-proxy_init.sh.gz
 

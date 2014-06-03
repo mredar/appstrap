@@ -1,8 +1,7 @@
 ---
 #### Use --extra-vars "tenant_name=<new tenant name>" to the
 #ansible-playbook call to set new tenant name
--   hosts: localhost
-    connection: local
+-   hosts: aspace1
     gather_facts: True         
     vars:
       db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
@@ -23,7 +22,7 @@
       shell: cat ~/.port_next_tenant
       register: start_port
     - name: get the db master password
-      shell: cat ~/.dbpass
+      local_action: shell cat ~/.dbpass
       register: pswd_db_master 
     - fail: msg='No ~/.dbpass file'
       when: pswd_db_master == None
@@ -48,7 +47,7 @@
     - name: config tenant db access
       template: src=templates/aspace/config.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/config.rb
     - name: config tenant instance
-      template: src=templates/aspace/instance_hostname.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/instance_{{ hostname.stdout }}.rb
+      template: src=templates/aspace/instance_hostname.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/instance_{{ hostname.stdout }}.rb mode=755
     - name: setup tenant database
       shell: chdir={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/ ./scripts/setup-database.sh
 
@@ -61,3 +60,6 @@
     - debug: msg="Hostname-> {{ hostname.stdout }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
     - debug: msg="Archivespace frontend port-> {{ start_port.stdout }}"
+    - name: start archivesspace server
+      sudo: yes
+      shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}

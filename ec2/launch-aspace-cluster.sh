@@ -13,7 +13,7 @@
 set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.com/questions/59895
 AMI_EBS="ami-05355a6c"
-EC2_SIZE="m1.small"
+EC2_SIZE="m3.large"
 EC2_REGION=us-east-1
 cd $DIR
 
@@ -51,7 +51,7 @@ command="aws ec2 run-instances
      --count 1:1                                   
      --image-id $AMI_EBS                             
      --user-data file://ec2_aspace_cluster_init.sh.gz
-     --key-name UCLDC_keypair_0
+     --key-name aspace-cluster
      --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
@@ -65,7 +65,7 @@ zone=`echo $ret_val_launch | jq '.Instances[0] | .Placement | .AvailabilityZone'
 echo "DONE WITH INSTANCE LAUNCH: $instance"
 echo "Availability zone=$zone"
 
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=Aspace-cluster Key=project,Value=aspace"
+name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace"
 tags=`$name_cmd`
 
 echo tags
@@ -83,6 +83,13 @@ while [ "$running" != '16' ]
   done
 
 echo "INSTANCE:$instance"
+
+#Tag volumes attached
+volumes=`aws ec2 describe-instances --region us-east-1 --instance-ids $instance |jq ' .Reservations[0] | .Instances[0] | .BlockDeviceMappings | .[] | .Ebs | .VolumeId' | tr \" \  | tr \n \  `
+
+echo "VOLUMES: $volumes"
+
+tags2=`aws ec2 create-tags --region $EC2_REGION --resources ${volumes} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace`
 
 #TODO: cleanup init file ec2_aspace_cluster_init.sh.gz
 
