@@ -1,5 +1,5 @@
 ---
-#### Use --extra-vars "tenant_name=<new tenant name>" to the
+# Use --extra-vars "tenant_name=<new tenant name>" to the
 #ansible-playbook call to set new tenant name
 -   hosts: aspace1
     gather_facts: True         
@@ -54,6 +54,9 @@
     - name: update starting port for next tenant
       lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 4 }}" state=present backrefs=yes
 
+    - name: create monit monitor for tenant
+      sudo: yes
+      template: src=templates/aspace/service.monitrc dest=/etc/monit.d/{{ tenant_name }}-aspace.monitrc
     - name: save tenant information
       lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ pswd_db_user.stdout }} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
@@ -63,3 +66,12 @@
     - name: start archivesspace server
       sudo: yes
       shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
+    - name: reload monit
+      sudo: yes
+      command: monit reload
+    - name: reload monit
+      sudo: yes
+      command: monit reload
+    - name: monitor new tenant instance
+      sudo: yes
+      command: monit monitor {{ tenant_name }}-aspace

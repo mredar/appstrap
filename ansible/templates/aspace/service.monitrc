@@ -1,0 +1,10 @@
+check process {{ tenant_name }}-aspace with pidfile /aspace/archivesspace/tenants/{{ tenant_name }}/archivesspace/data/.archivesspace.pid
+  start program = "/etc/init.d/aspace-cluster start-tenant {{ tenant_name }}" with timeout 300 seconds
+  stop program  = "/etc/init.d/aspace-cluster stop-tenant {{ tenant_name }}"
+  if children > 250 then restart
+  if failed host localhost port {{ start_port.stdout }} protocol http
+     then restart
+  if 6 restarts within 8 cycles then timeout
+  group aspace
+
+
