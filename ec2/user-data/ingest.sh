@@ -30,6 +30,10 @@ rm -rf /usr/lib/python2.6/site-packages/setuptools*
 wget https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py -O - | python
 easy_install pip
 pip install virtualenv
+yum -y install python27-devel #needed for building python lxml
+yum -y install libxml2-devel #needed for building python lxml
+yum -y install libxml2-python #needed for building python lxml
+yum -y install libxslt-devel #needed for building python lxml
 
 pip install awscli  #not sure what version is installed on ec2 image - there is
 #no aws executable
