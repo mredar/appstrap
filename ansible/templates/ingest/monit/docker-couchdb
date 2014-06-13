@@ -1,0 +1,5 @@
+check program docker_couchdb with path "/usr/bin/docker ps -q | grep 7977e3a01348"
+	start program "/usr/bin/docker start 7977e3a01348"
+        stop program "/usr/bin/docker stop 7977e3a01348"
+	#if failed port 5984 then start
+	if status != 0 then start

@@ -1,0 +1,7 @@
+check program docker_akara with path "/usr/bin/docker ps -q | grep 6a91e0631a44"
+        every 1 cycles
+	start program "/usr/bin/docker start 7977e3a01348 6a91e0631a44"
+        stop program "/usr/bin/docker stop 6a91e0631a44"
+	#if failed port 8889 then start
+	if status != 0 then start
+
