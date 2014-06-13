@@ -1,0 +1,14 @@
+check process worker1
+	with pidfile "{{ role_home_dir.stdout }}/log/rqworker-1.pid"
+	start program "/bin/su - {{ whoami }} -c '{{ role_home_dir.stdout }}/bin/start-rqworker.sh 1'"
+	stop program "/bin/cat {{ role_home_dir.stdout }}/log/rqworker-1.pid | kill" 
+
+check process worker2
+	with pidfile "{{ role_home_dir.stdout }}/log/rqworker-2.pid"
+	start program "/bin/su - {{ whoami }} -c '{{ role_home_dir.stdout }}/bin/start-rqworker.sh 2'"
+	stop program "/bin/cat {{ role_home_dir.stdout }}/log/rqworker-2.pid | kill" 
+
+check process worker3
+	with pidfile "{{ role_home_dir.stdout }}/log/rqworker-3.pid"
+	start program "/bin/su -  {{ whoami }} -c '{{ role_home_dir.stdout }}/bin/start-rqworker.sh 3'"
+	stop program "/bin/cat {{ role_home_dir.stdout }}/log/rqworker-3.pid | kill" 
