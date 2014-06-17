@@ -37,37 +37,33 @@ yum -y install libxslt-devel #needed for building python lxml
 
 pip install awscli  #not sure what version is installed on ec2 image - there is
 #no aws executable
-###yum -y install python-devel  # needed to install(init?) virtualenv with local python
 yum -y install ncurses-devel # needed to install pkgsrc python
-####yum -y install dialog
-###yum -y install openssl-devel
-###yum -y install libjpeg-devel
-###yum -y install freetype-devel
-####yum -y install libz-devel
-###yum -y install libtiff-devel
-###yum -y install lcms-devel
-###yum install -y readline-devel libyaml-devel libffi-devel #needed for rvm
 
 yum install nginx #will proxy and control access to couchdb
 
+yum install docker
+
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
-useradd ingest
-touch ~ingest/init.sh
-chown ingest:ingest ~ingest/init.sh
-chmod 700 ~ingest/init.sh
-# write the file
-cat > ~ingest/init.sh <<EOSETUP
+touch ~ec2-user/init.sh
+chown ec2-user:ec2-user ~ec2-user/init.sh
+chmod 700 ~ec2-user/init.sh
+#### write the file
+cat > ~ec2-user/init.sh <<EOSETUP
 #!/usr/bin/env bash
 cd
+mkdir code
+cd code
 git clone -b ingest https://github.com/mredar/appstrap.git
-./appstrap/stacks/stack_ingest #want this to finish, so below works
+cd appstrap/ansible
+pwd
+if [[ ! -d bin ]]; then
+  ./init.sh
+fi
+set +u
+. bin/activate
+set -u
+ansible-playbook -i host_inventory ingest-playbook.yml
 EOSETUP
-su - ingest -c ~ingest/init.sh
-rm ~ingest/init.sh 
-cp ~ingest/appstrap/ansible/templates/ingest/nginx.conf.j2 /etc/nginx/nginx.conf
 
-cp ~ingest/init.d-monit /etc/init.d/monit
-chmod 0755 /etc/init.d/monit
-chkconfig --add monit
-
+su - ec2-user -c ~ec2-user/init.sh
