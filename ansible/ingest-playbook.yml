@@ -18,6 +18,12 @@
       template: src=./templates/ingest/gitconfig.j2 dest=~/.gitconfig
     - name: make home bin dir
       file: path=~/bin state=directory
+    - name: start redis docker
+      sudo: yes
+      docker: image=tutum/redis command="/run.sh" publish_all_ports name=redis
+    - name: Display IP address and port mappings for containers
+      debug: msg={{inventory_hostname}}:{{item['HostConfig']['PortBindings']['8080/tcp'][0]['HostPort']}}
+      with_items: docker_containers
     - include: tasks/ingest/monit_setup.yml
     - name: monit validate
       sudo: yes
