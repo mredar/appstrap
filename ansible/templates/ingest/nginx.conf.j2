@@ -75,6 +75,7 @@ http {
     server {
         listen       443;
         server_name  localhost;
+        server_name  54.84.142.143;
 
         ssl                  on;
         ssl_certificate      cert.pem;
@@ -90,7 +91,16 @@ http {
             auth_basic	"Restricted";
             auth_basic_user_file htpasswd;
 
+        }
+
+        location /couchdb {
+            rewrite /couchdb/(.*) /$1 break; 
             proxy_pass http://localhost:5984;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            #proxy_set_header Authentication "";
+            proxy_set_header X-Forwarded-Ssl on;
 
         }
     }
