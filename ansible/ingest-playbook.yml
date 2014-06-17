@@ -20,7 +20,15 @@
       file: path=~/bin state=directory
     - name: start redis docker
       sudo: yes
-      docker: image=tutum/redis command="/run.sh" publish_all_ports name=redis
+      docker: image=tutum/redis command="/run.sh" ports=6379:6379 name=redis
+    - name: start couchdb docker
+      sudo: yes
+      docker: image=mredar/couchdb command="/run.sh" ports=5984:5984 name=couchdb volumes=/var/lib/couchdb
+    - name: put akara env list in place
+      template: src=./templates/ingest/akara-env.list.j2 dest=/home/ec2-user/.akara-env.list
+    - name: start akara docker
+      sudo: yes
+      comman: /usr/bin/docker run -d -p 8889:8889 --env-file /home/ec2-user/.akara-env.list --name=akara mredar/akara-dpla /run.sh
     - name: Display IP address and port mappings for containers
       debug: msg={{inventory_hostname}}:{{item['HostConfig']['PortBindings']['8080/tcp'][0]['HostPort']}}
       with_items: docker_containers
