@@ -16,10 +16,12 @@ yum -y update			# get the latest security updates
 
 # make sure we use all the attached storage
 resize2fs /dev/xvda1
+mount /dev/sdb /var
 
 # install the rest of the software we need
 # git is needed for the build
 yum -y install git 
+yum -y install monit
 
 # handles pkgsrc requirements
 yum -y groupinstall "Development Tools"
@@ -39,9 +41,9 @@ pip install awscli  #not sure what version is installed on ec2 image - there is
 #no aws executable
 yum -y install ncurses-devel # needed to install pkgsrc python
 
-yum install nginx #will proxy and control access to couchdb
+yum -y install nginx #will proxy and control access to couchdb
 
-yum install docker
+yum -y install docker
 
 su - ec2-user -c 'curl https://raw.github.com/tingletech/appstrap/master/cdl/ucldc-operator-keys.txt >> ~/.ssh/authorized_keys'
 
