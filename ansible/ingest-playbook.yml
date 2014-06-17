@@ -19,7 +19,6 @@
     - name: make home bin dir
       file: path=~/bin state=directory
     - include: tasks/ingest/monit_setup.yml
-    - name: create init.d-monit #NOTE: must use ec2-user to install
-      template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit
     - name: monit validate
+      sudo: yes
       shell: monit validate
