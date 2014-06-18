@@ -1,0 +1,7 @@
+check program ingest_idle  with  path /usr/local/bin/ingest_is_idle.bash
+	every 1 cycles
+	start program "/bin/echo No Start"
+	stop program "/usr/bin/aws ec2 stop-instances --regions us-east-1 --instance-ids i-1bf2173a i-4a749f6a" 
+	if status == 0 then alert
+        if status == 0 then stop
+

@@ -110,7 +110,7 @@ command="aws ec2 run-instances
      --key-name UCLDC_keypair_0
      --block-device-mappings file://block-devices-ucldc-ingest.json
      --security-group-ids sg-fcc06199 sg-47c06122
-     --iam-instance-profile Name=s3-readonly"
+     --iam-instance-profile Name=ingest-control"
 
 echo "ec2 launch command $command"
 

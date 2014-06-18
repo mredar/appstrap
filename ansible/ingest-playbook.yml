@@ -16,18 +16,15 @@
       template: src=./templates/ingest/bashrc.j2 dest=~/.bashrc
     - name: put gitconfig in place
       template: src=./templates/ingest/gitconfig.j2 dest=~/.gitconfig
-    - name: put couch local.ini into place
-      template: src=./templates/ingest/couch-local.ini.j2 dest=~/pkg/etc/couchdb/local.ini
     - name: make home bin dir
       file: path=~/bin state=directory
-    - name: put couch init.d in place, will be copied by ec2-user
-      template: src=./templates/ingest/couchdb-init.d.j2 dest=~/bin/couchdb-init.d mode=0755
-###    - name: install amara
-###      pip: name=Amara extra_args='-i http://pypi.zepheira.com/releases/index' 
-###    - name: install akara
-###      pip: name=Akara extra_args='-i http://pypi.zepheira.com/releases/index' 
+    - name: start redis docker
+      sudo: yes
+      docker: image=tutum/redis command="/run.sh" publish_all_ports name=redis
+    - name: Display IP address and port mappings for containers
+      debug: msg={{inventory_hostname}}:{{item['HostConfig']['PortBindings']['8080/tcp'][0]['HostPort']}}
+      with_items: docker_containers
     - include: tasks/ingest/monit_setup.yml
-    - name: create init.d-monit #NOTE: must use ec2-user to install
-      template: src=./templates/solr/init.d-monit.j2 dest=~/init.d-monit
     - name: monit validate
+      sudo: yes
       shell: monit validate
