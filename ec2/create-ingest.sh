@@ -51,31 +51,6 @@ tags=`$name_cmd`
 echo tags
 echo "DONE WITH NAMING"
 
-cat user-data/akara.sh > ec2_akara_init.sh
-gzip ec2_akara_init.sh
-
-#TODO: Run & provision Akara instance
-command="aws ec2 run-instances 
-     --region $EC2_REGION 
-     --subnet subnet-fddeca89
-     --monitoring file://monitoring.json
-     --instance-type $EC2_SIZE                       
-     --count 1:1                                   
-     --image-id $AMI_EBS                             
-     --user-data file://ec2_akara_init.sh.gz
-     --key-name UCLDC-ingest-private
-     --security-group-ids sg-47c06122
-     --iam-instance-profile Name=s3-readonly"
-
-instance=`$command | jq '.Instances[0] | .InstanceId' -r`
-
-echo "DONE WITH INGEST AKARA INSTANCE LAUNCH: $instance"
-
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=UCLDC-ingest-akara Key=project,Value=ucldc"
-tags=`$name_cmd`
-
-echo tags
-
 cat user-data/ingest.sh > ec2_ingest_init.sh
 
 # only on the t1.micro, tune swap
