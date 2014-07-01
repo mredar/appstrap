@@ -16,6 +16,8 @@ set +u
 . ./bin/activate
 set -o nounset
 
+. ~/.harvester-env
+
 if [ -e {{ role_home_dir.stdout }}/log/rqworker-${1}.pid ]; then
     #is running already?
     worker_pid=`/bin/cat {{ role_home_dir.stdout }}/log/rqworker-${1}.pid`
