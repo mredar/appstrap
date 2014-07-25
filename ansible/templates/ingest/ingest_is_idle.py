@@ -1,11 +1,12 @@
 #check if ingest is idle
 # takes output from rqinfo and parses to see if not idle
-import sys
+import sys, os
 from rq import Queue, Worker
 from rq.scripts import (setup_default_arguments, setup_redis)
 
-settings = { 'REDIS_PASSWORD':'<???>',
-}
+settings = { 'REDIS_PASSWORD':
+                os.environ.get('REDIS_PASSWORD', {{ REDIS_PASSWORD }})
+           }
 
 class Args:
     url = None
