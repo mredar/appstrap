@@ -1,4 +1,5 @@
 #! /bin/bash
+# Run as role user
 if [[ -n "$DEBUG" ]]; then 
   set -x
 fi
@@ -8,15 +9,16 @@ set -o errtrace  # trace ERR through 'time command' and other functions
 set -o nounset   ## set -u : exit the script if you try to use an uninitialised variable
 set -o errexit   ## set -e : exit the script if any statement returns a non-true return value
 
-cd {{ role_home_dir.stdout }}/code/harvester/
+. {{ role_home_dir.stdout }}/.harvester-env
 
-export EMAIL_RETURN_ADDRESS=ucldc@ucop.edu
+cd {{ role_home_dir.stdout }}/workers_local/
+
+export EMAIL_RETURN_ADDRESS=ucldc@example.edu
 
 set +u
 . ./bin/activate
 set -o nounset
 
-. ~/.harvester-env
 
 if [ -e {{ role_home_dir.stdout }}/log/rqworker-${1}.pid ]; then
     #is running already?
