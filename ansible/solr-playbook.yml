@@ -22,6 +22,7 @@
     - include: tasks/solr/tomcat_dir_setup.yml #create dirs and copy static files
     - include: tasks/solr/monit_setup.yml
     - include: tasks/solr/config_solr_server.yml
+    - include: tasks/solr/setup_log4j.yml
     - name: start tomcat to install solr war
       shell: monit start tomcat creates={{ role_home_dir.stdout}}/servers/tomcat/webapps/solr/
     - name: wait for tomcat
