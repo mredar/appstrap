@@ -1,0 +1,9 @@
+check program ingest_idle  with  path /usr/local/bin/ingest_is_idle.bash
+        every 1 cycles
+#DON'T USE START/STOP PROGRAM, MONIT will call in various states other
+# than check failure
+	#start program "/bin/echo No Start"
+	#stop program "/usr/bin/aws ec2 stop-instances --region us-east-1 --instance-ids i-1bf2173a i-49952b63"
+        # 64 is number for cycle check
+        if status == 0 for 64 cycles then exec "/usr/bin/aws ec2 stop-instances --region us-east-1 --instance-ids i-1bf2173a i-49952b63"
+	depends on docker_redis, docker_couchdb, worker1

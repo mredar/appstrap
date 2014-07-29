@@ -1,6 +1,6 @@
-check program docker_redis with path "/usr/bin/docker ps -q | grep 0ae4447d81ae"
+check program docker_redis with path "/usr/bin/docker ps -q | grep 6fa8a2707981"
         every 1 cycles
-	start program "/usr/bin/docker start 0ae4447d81ae"
-        stop program "/usr/bin/docker stop 0ae4447d81ae"
+	start program "/usr/bin/docker start redis"
+        stop program "/usr/bin/docker stop redis"
 	#if failed port 5984 then start
 	if status != 0 then start

@@ -1,7 +1,7 @@
 check program docker_rqdash with path "/usr/bin/docker ps -q | grep 99c606b73557"
         every 1 cycles
-	start program "/usr/bin/docker start 99c606b73557"
-        stop program "/usr/bin/docker stop 99c606b73557"
+	start program "/usr/bin/docker start rq-dashboard"
+        stop program "/usr/bin/docker stop rq-dashboard"
 	#if failed port 5984 then start
 	if status != 0 then start
 	depends on docker_redis
