@@ -13,7 +13,9 @@
 set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.com/questions/59895
 AMI_EBS="ami-05355a6c"
-EC2_SIZE="m1.small"
+AMI_EBS_HVM="ami-76817c1e"
+AMI_EBS=$AMI_EBS_HVM
+EC2_SIZE="m3.large"
 EC2_REGION=us-east-1
 cd $DIR
 
@@ -52,6 +54,7 @@ command="aws ec2 run-instances
      --user-data file://ec2_nginx-proxy_init.sh.gz
      --key-name aspace-majorTom
      --security-group-ids sg-a8f437cd sg-9879b9fd
+     --disable-api-termination
      --iam-instance-profile Name=aspace-control"
 
 echo "ec2 launch command $command"
