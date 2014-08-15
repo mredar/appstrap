@@ -1,4 +1,4 @@
-check program docker_akara with path "/usr/bin/docker ps -q | grep 4a15013a38dc"
+check program docker_akara with path "/usr/bin/docker ps -q | grep 52a7e85af474"
         every 1 cycles
 	start program "/usr/bin/docker start couchdb akara"
         stop program "/usr/bin/docker stop akara"
