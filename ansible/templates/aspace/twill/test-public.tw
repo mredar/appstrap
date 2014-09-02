@@ -1,0 +1,27 @@
+#NOTE: aspace didn't like header of Accept: text/html; */*
+#changed in twill src to be just */*
+setglobal root_url __url__
+go $root_url
+code 200
+
+#debug http 1
+go /search?type=repository
+code 200
+
+go /search?type=resource
+code 200
+
+go /search?type=digital_object
+code 200
+
+go /search?type=accession
+code 200
+
+go /search?type=subject
+code 200
+
+go /search?type=agent
+code 200
+
+go /search?type=classification
+code 200
