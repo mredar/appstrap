@@ -1,0 +1,3 @@
+check program twill_ucsc with path "/home/ec2-user/bin/run-twill.sh http://ucsc.aspace.cdlib.org"
+	every 1 cycles
+	if status != 0 then alert
