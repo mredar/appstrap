@@ -52,7 +52,7 @@
       shell: chdir={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/ ./scripts/setup-database.sh
 
     - name: update starting port for next tenant
-      lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 4 }}" state=present backrefs=yes
+      lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 10 }}" state=present backrefs=yes
 
     - name: create monit monitor for tenant
       sudo: yes
