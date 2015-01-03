@@ -30,7 +30,3 @@
       file: src={{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}} dest={{ aspace_dir }}/archivesspace/software/stable state=link
     - name: get mysql connector
       get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ aspace_dir }}/archivesspace/software/stable/lib
-    - name: install system monit
-      yum: name=monit state=latest
-    - name: start monit on boot
-      service: name=monit enabled=yes state=started
