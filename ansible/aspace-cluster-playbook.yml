@@ -33,4 +33,4 @@
     - name: install system monit
       yum: name=monit state=latest
     - name: start monit on boot
-    service: name=monit enabled=yes state=started
+      service: name=monit enabled=yes state=started

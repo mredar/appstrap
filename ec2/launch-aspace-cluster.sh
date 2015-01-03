@@ -13,10 +13,10 @@
 set -eu
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.com/questions/59895
 AMI_EBS="ami-05355a6c"
-AMI_EBS_HVM="ami-76817c1e"
+AMI_EBS_HVM="ami-b66ed3de"
 AMI_EBS=$AMI_EBS_HVM
 EC2_SIZE="m3.large"
-EC2_SIZE="t2.medium"
+EC2_SIZE="t2.micro"
 EC2_REGION=us-east-1
 cd $DIR
 
@@ -43,7 +43,7 @@ DELIM
 
 fi
 
-gzip ec2_aspace_cluster_init.sh
+#gzip ec2_aspace_cluster_init.sh
 
 
 command="aws ec2 run-instances 
@@ -52,13 +52,13 @@ command="aws ec2 run-instances
      --monitoring file://monitoring.json
      --instance-type $EC2_SIZE                       
      --count 1:1                                   
-     --image-id $AMI_EBS                             
-     --user-data file://ec2_aspace_cluster_init.sh.gz
+     --image-id $AMI_EBS_HVM                             
+     --user-data file://ec2_aspace_cluster_init.sh
      --key-name aspace-cluster
      --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
-echo "ec2 launch command $command"
+echo "ec2 launch command is: $command"
 
 # launch an ec2 and grab the instance id
 ret_val_launch=`$command`
@@ -91,6 +91,9 @@ echo "INSTANCE:$instance"
 volumes=`aws ec2 describe-instances --region us-east-1 --instance-ids $instance |jq ' .Reservations[0] | .Instances[0] | .BlockDeviceMappings | .[] | .Ebs | .VolumeId' | tr \" \  | tr \n \  `
 
 echo "VOLUMES: $volumes"
+
+ip_instance=`aws ec2 describe-instances --region $EC2_REGION --instance-ids $instance | jq ' .Reservations[0] | .Instances[0] | .PrivateIpAddress '` 
+echo "IP: $ip_instance"
 
 tags2=`aws ec2 create-tags --region $EC2_REGION --resources ${volumes} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace`
 
