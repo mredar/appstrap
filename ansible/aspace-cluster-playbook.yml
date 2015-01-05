@@ -3,7 +3,7 @@
     connection: local
     gather_facts: True         
     vars:
-      aspace_version: 1.0.4
+      aspace_version: 1.0.9
       aspace_dir: /aspace
     tasks:
     - name: check_appstrap
