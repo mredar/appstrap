@@ -5,7 +5,7 @@
 # must also pass following:
 # --extra-vars "tenant_db_password=<tenant_db_password>"
 # Database for tenant must be already configured.
--   hosts: aspace1
+-   hosts: aspace-cluster
     gather_facts: True         
     vars:
       db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'

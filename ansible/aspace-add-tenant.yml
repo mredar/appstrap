@@ -1,7 +1,7 @@
 ---
 # Use --extra-vars "tenant_name=<new tenant name>" to the
 #ansible-playbook call to set new tenant name
--   hosts: aspace1
+-   hosts: aspace-cluster
     gather_facts: True         
     vars:
       db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
