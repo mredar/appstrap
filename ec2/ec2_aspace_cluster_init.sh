@@ -72,7 +72,10 @@ cp /aspace/aspace-cluster.init /etc/init.d/aspace-cluster
 chmod +x /etc/init.d/aspace-cluster
 chkconfig --add aspace-cluster
 
+echo 'set httpd port 2812 and use address localhost allow localhost' >> /etc/monit.conf
+
 #rm ~aspace/init.sh 
 #cp ~aspace/init.d-monit /etc/init.d/monit
 #chmod 0755 /etc/init.d/monit
 chkconfig --add monit
+monit reload
