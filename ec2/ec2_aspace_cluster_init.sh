@@ -19,6 +19,8 @@ yum -y update			# get the latest security updates
 # git is needed for the build
 yum -y install git 
 
+yum -y install monit
+
 
 yum -y groupinstall "Development Tools"
 yum -y install python-devel
@@ -71,6 +73,6 @@ chmod +x /etc/init.d/aspace-cluster
 chkconfig --add aspace-cluster
 
 #rm ~aspace/init.sh 
-cp ~aspace/init.d-monit /etc/init.d/monit
-chmod 0755 /etc/init.d/monit
+#cp ~aspace/init.d-monit /etc/init.d/monit
+#chmod 0755 /etc/init.d/monit
 chkconfig --add monit

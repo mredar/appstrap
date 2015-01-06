@@ -20,6 +20,13 @@ EC2_SIZE="t2.micro"
 EC2_REGION=us-east-1
 cd $DIR
 
+if [ "$#" -ne 1 ]; then
+  echo "Usage: launch-aspace-cluster <tenant-name>"
+  exit 11;
+fi
+tenant=$1
+echo "TENANT = $tenant"
+
 zone=`cat placement.json|jq '.AvailabilityZone' -r`
 
 cat user-data/aspace-cluster.sh > ec2_aspace_cluster_init.sh
@@ -68,7 +75,7 @@ zone=`echo $ret_val_launch | jq '.Instances[0] | .Placement | .AvailabilityZone'
 echo "DONE WITH INSTANCE LAUNCH: $instance"
 echo "Availability zone=$zone"
 
-name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-cluster Key=project,Value=aspace"
+name_cmd="aws ec2 create-tags --region $EC2_REGION --resources ${instance} --tags Key=Name,Value=aspace-cluster-$tenant Key=project,Value=aspace"
 tags=`$name_cmd`
 
 echo tags

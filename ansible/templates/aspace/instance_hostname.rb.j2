@@ -3,4 +3,5 @@
   :public_url => "http://{{ hostname.stdout }}:{{ start_port.stdout|int + 1 }}",
   :backend_url => "http://{{ hostname.stdout }}:{{ start_port.stdout|int +2 }}",
   :solr_url => "http://{{ hostname.stdout }}:{{ start_port.stdout|int + 3 }}",
+  :indexer_url => "http://{{ hostname.stdout }}:{{ start_port.stdout|int + 4 }}",
 }

@@ -30,6 +30,8 @@
 ####wars
 ####
 - name: remove links to custom directories
-  shell: rm -f {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/data {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/logs {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config
+  shell: rm -f {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/data {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/logs {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/reports
 - name: remake logs and data and config
-  shell: mkdir -p {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/{logs,data,config}
+  shell: mkdir -p {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/{logs,data,config,reports}
+- name: chown to tenant user logs and data and config
+  shell: chown {{ tenant_name}}:{{ tenant_name}} {{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/{logs,data,config,reports}

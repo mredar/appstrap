@@ -47,7 +47,7 @@
     - name: config tenant db access
       template: src=templates/aspace/config.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/config.rb
     - name: config tenant instance
-      template: src=templates/aspace/instance_hostname.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/instance_{{ hostname.stdout }}.rb mode=755
+      template: src=templates/aspace/instance_hostname.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/instance_{{ ansible_hostname }}.rb mode=755
     - name: setup tenant database
       shell: chdir={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/ ./scripts/setup-database.sh
 
@@ -59,8 +59,11 @@
       template: src=templates/aspace/service.monitrc dest=/etc/monit.d/{{ tenant_name }}-aspace.monitrc
     - name: save tenant information
       lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ pswd_db_user.stdout }} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
+    - name: save tenant information, master
+      delegate_to: 127.0.0.1
+      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ tenant_db_password }} | host - {{ ansible_hostname}} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
-    - debug: msg="Hostname-> {{ hostname.stdout }}"
+    - debug: msg="Hostname-> {{ ansible_hostname }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
     - debug: msg="Archivespace frontend port-> {{ start_port.stdout }}"
     - name: start archivesspace server
