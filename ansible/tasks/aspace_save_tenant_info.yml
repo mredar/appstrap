@@ -1,0 +1,7 @@
+---
+    - name: save tenant information
+      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }},{{ ansible_hostname }},{{ start_port.stdout }},{{ start_port.stdout|int + 1}},{{ tenant_db_password }}"
+    - name: save tenant information, master
+      delegate_to: 127.0.0.1
+      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }},{{ ansible_hostname }},{{ start_port.stdout }},{{ start_port.stdout|int + 1}},{{ tenant_db_password }}"
+

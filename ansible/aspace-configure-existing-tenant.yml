@@ -17,9 +17,9 @@
       url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
       url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
     tasks:
-    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<tenant name>" to ansible-playbook call'
       when: tenant_name == None
-    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+    - fail: msg='Need to set tenant database password by adding --extra-vars "tenant_db_pass=<tenant password>" to ansible-playbook call'
       when: tenant_db_password == None
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
@@ -43,15 +43,11 @@
       template: src=templates/aspace/instance_hostname.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/instance_{{ ansible_hostname }}.rb mode=755
     - name: update starting port for next tenant
       lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 10 }}" state=present backrefs=yes
-
+    - include: tasks/aspace_save_tenant_info.yml
     - name: create monit monitor for tenant
       sudo: yes
       template: src=templates/aspace/service.monitrc dest=/etc/monit.d/{{ tenant_name }}-aspace.monitrc
-    - name: save tenant information
-      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ tenant_db_password }} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
-    - name: save tenant information, master
-      delegate_to: 127.0.0.1
-      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ tenant_db_password }} | host - {{ ansible_hostname}} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
+    - include: tasks/aspace_save_tenant_info.yml
     - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
     - debug: msg="Hostname-> {{ ansible_hostname }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
@@ -59,9 +55,6 @@
     - name: start archivesspace server
       sudo: yes
       shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
-    - name: reload monit
-      sudo: yes
-      command: monit reload
     - name: reload monit
       sudo: yes
       command: monit reload

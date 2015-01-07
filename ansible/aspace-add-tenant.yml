@@ -12,6 +12,7 @@
       dir_aspace_root: '/aspace/'
       url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
       url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
+      tenant_db_password: "{{ lookup('password', '~/.aspace/' + ansible_hostname + '/' + tenant_name + '.pswd' ) }}"
     tasks:
     - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
       when: tenant_name == None
@@ -26,24 +27,21 @@
       register: pswd_db_master 
     - fail: msg='No ~/.dbpass file'
       when: pswd_db_master == None
-    - name: generate a random password for tenant db user
-      shell: "cat /dev/urandom | tr -dc A-Za-z0-9 | head -c 16"
-      register: pswd_db_user 
-    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
     - include: tasks/generate_aspace_secrets.yml
     - name: create tenant user
       command: sudo /usr/sbin/useradd -U {{ tenant_name }}
-    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
     - name: create mysql database
       mysql_db: name={{ tenant_name }} encoding='utf8' login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }}
     - name: create mysql user {{ tenant_name }} with PASSWORD {{ random_pwd.stdout }}
-      mysql_user: login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }} name={{ tenant_name }} password={{ pswd_db_user.stdout }} host=% priv={{ tenant_name }}.*:ALL
+      mysql_user: login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }} name={{ tenant_name }} password={{ tenant_db_password }} host=% priv={{ tenant_name }}.*:ALL
     - name: copy tenant dir template dirs to tenant dir
       shell: "cp -a {{ dir_aspace_root }}/archivesspace/tenants/_template {{ dir_aspace_root}}/archivesspace/tenants/{{ tenant_name }}"
     - name: run init_tenant
       shell: chdir={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/  ./init_tenant.sh stable
     - set_fact:
-        url_jdbc_aspace: "{{ url_jdbc_base }}{{ tenant_name }}?user={{ tenant_name }}&password={{ pswd_db_user.stdout }}{{ url_jdbc_suffix }}"
+        url_jdbc_aspace: "{{ url_jdbc_base }}{{ tenant_name }}?user={{ tenant_name }}&password={{ tenant_db_password }}{{ url_jdbc_suffix }}"
     - name: config tenant db access
       template: src=templates/aspace/config.rb.j2 dest={{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/config/config.rb
     - name: config tenant instance
@@ -53,16 +51,11 @@
 
     - name: update starting port for next tenant
       lineinfile: dest=~/.port_next_tenant regexp=(\\d)+ line="{{ start_port.stdout|int + 10 }}" state=present backrefs=yes
-
+    - include: tasks/aspace_save_tenant_info.yml
     - name: create monit monitor for tenant
       sudo: yes
       template: src=templates/aspace/service.monitrc dest=/etc/monit.d/{{ tenant_name }}-aspace.monitrc
-    - name: save tenant information
-      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ pswd_db_user.stdout }} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
-    - name: save tenant information, master
-      delegate_to: 127.0.0.1
-      lineinfile: dest=~/.tenant_info create=yes line="{{ tenant_name }} - {{ tenant_db_password }} | host - {{ ansible_hostname}} | front port - {{ start_port.stdout }} | public port - {{ start_port.stdout|int + 1}}"
-    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ pswd_db_user.stdout }}"
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
     - debug: msg="Hostname-> {{ ansible_hostname }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
     - debug: msg="Archivespace frontend port-> {{ start_port.stdout }}"
