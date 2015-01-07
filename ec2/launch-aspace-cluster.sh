@@ -62,6 +62,7 @@ command="aws ec2 run-instances
      --image-id $AMI_EBS_HVM                             
      --user-data file://ec2_aspace_cluster_init.sh
      --key-name aspace-cluster
+     --disable-api-termination
      --block-device-mappings file://block-devices-aspace.json
      --iam-instance-profile Name=s3-readonly"
 
