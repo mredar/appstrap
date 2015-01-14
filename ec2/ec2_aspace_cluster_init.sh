@@ -80,5 +80,16 @@ echo 'set alert mark.redar@ucop.edu' >> /etc/monit.conf
 #cp ~aspace/init.d-monit /etc/init.d/monit
 #chmod 0755 /etc/init.d/monit
 chkconfig --add monit
-service start monit
 monit reload
+# t2.micro's don't come with any swap; let's add 1G
+## to do -- add test for micro
+# http://cloudstory.in/2012/02/adding-swap-space-to-amazon-ec2-linux-micro-instance-to-increase-the-performance/
+# http://www.matb33.me/2012/05/03/wordpress-on-ec2-micro.html
+/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+/sbin/mkswap /var/swap.1
+/sbin/swapon /var/swap.1
+# in case we get rebooted, add swap to fstab
+cat >> /etc/fstab << FSTAB
+/var/swap.1 swap swap defaults 0 0
+FSTAB
+# t2.micro memory optimizations

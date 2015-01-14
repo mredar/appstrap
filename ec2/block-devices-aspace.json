@@ -1,4 +1,9 @@
 [
+    { "DeviceName": "/dev/xvda",
+      "Ebs": {
+      	   "VolumeType": "gp2"
+	}
+    },
     {
          "VirtualName": "/aspace",
          "DeviceName": "/dev/sdb",
