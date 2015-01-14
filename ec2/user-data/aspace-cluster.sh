@@ -73,6 +73,8 @@ chmod +x /etc/init.d/aspace-cluster
 chkconfig --add aspace-cluster
 
 echo 'set httpd port 2812 and use address localhost allow localhost' >> /etc/monit.conf
+echo 'set mailserver localhost' >> /etc/monit.conf
+echo 'set alert mark.redar@ucop.edu' >> /etc/monit.conf
 
 #rm ~aspace/init.sh 
 #cp ~aspace/init.d-monit /etc/init.d/monit

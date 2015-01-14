@@ -15,7 +15,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.c
 AMI_EBS="ami-05355a6c"
 AMI_EBS_HVM="ami-b66ed3de"
 AMI_EBS=$AMI_EBS_HVM
-EC2_SIZE="m3.large"
 EC2_SIZE="t2.micro"
 EC2_REGION=us-east-1
 cd $DIR
@@ -31,10 +30,10 @@ zone=`cat placement.json|jq '.AvailabilityZone' -r`
 
 cat user-data/aspace-cluster.sh > ec2_aspace_cluster_init.sh
 
-# only on the t1.micro, tune swap
-if [ "$EC2_SIZE" == 't1.micro' ]; then
+# only on the t2.micro, tune swap
+if [ "$EC2_SIZE" == 't2.micro' ]; then
   cat >> ec2_aspace_cluster_init.sh << DELIM
-# t1.micro's don't come with any swap; let's add 1G
+# t2.micro's don't come with any swap; let's add 1G
 ## to do -- add test for micro
 # http://cloudstory.in/2012/02/adding-swap-space-to-amazon-ec2-linux-micro-instance-to-increase-the-performance/
 # http://www.matb33.me/2012/05/03/wordpress-on-ec2-micro.html
@@ -45,7 +44,7 @@ if [ "$EC2_SIZE" == 't1.micro' ]; then
 cat >> /etc/fstab << FSTAB
 /var/swap.1 swap swap defaults 0 0
 FSTAB
-# t1.micro memory optimizations
+# t2.micro memory optimizations
 DELIM
 
 fi
