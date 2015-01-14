@@ -59,9 +59,9 @@
     - debug: msg="Hostname-> {{ ansible_hostname }}"
     - debug: msg="Archivespace public  port-> {{ start_port.stdout|int + 1 }}"
     - debug: msg="Archivespace frontend port-> {{ start_port.stdout }}"
-    - name: start archivesspace server
-      sudo: yes
-      shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
+#    - name: start archivesspace server
+#      sudo: yes
+#      shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
     - name: reload monit
       sudo: yes
       command: monit
@@ -70,4 +70,4 @@
       command: monit reload
     - name: monitor new tenant instance
       sudo: yes
-      command: monit monitor {{ tenant_name }}-aspace
+      command: monit start {{ tenant_name }}-aspace
