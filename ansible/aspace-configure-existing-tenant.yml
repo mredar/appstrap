@@ -55,6 +55,9 @@
     - name: start archivesspace server
       sudo: yes
       shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
+    - name: start monit daemon?
+      sudo: yes
+      command: monit
     - name: reload monit
       sudo: yes
       command: monit reload

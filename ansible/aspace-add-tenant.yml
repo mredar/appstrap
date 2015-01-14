@@ -64,7 +64,7 @@
       shell: /etc/init.d/aspace-cluster start-tenant {{ tenant_name }}
     - name: reload monit
       sudo: yes
-      command: monit reload
+      command: monit
     - name: reload monit
       sudo: yes
       command: monit reload
