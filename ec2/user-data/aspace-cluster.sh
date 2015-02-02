@@ -80,5 +80,4 @@ echo 'set alert mark.redar@ucop.edu' >> /etc/monit.conf
 #cp ~aspace/init.d-monit /etc/init.d/monit
 #chmod 0755 /etc/init.d/monit
 chkconfig --add monit
-service start monit
-monit reload
+service monit start
