@@ -1,0 +1,44 @@
+---
+# upgrade from 1.1.1 to 1.1.2 with plugin grab?
+# must also pass following:
+# --extra-vars "tenant_db_password=<tenant_db_password>"
+# Database for tenant must be already configured.
+-   hosts: aspace-cluster
+    gather_facts: True         
+    vars:
+      db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_port: 3306
+      db_user: 'rds_aspace_admin'
+      dir_code_src: '~/code/'
+      dir_servers: '~/servers/'
+      dir_aspace_root: '/aspace/'
+      url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
+      url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
+    tasks:
+    - name: get archivesspace 1.1.2 zip file
+      get_url: 
+        url: https://github.com/archivesspace/archivesspace/releases/download/v1.1.2/archivesspace-v1.1.2.zip
+        dest: /aspace/archivesspace/software/archivesspace-v1.1.2.zip
+        sha256sum: b0cad990d95278f64ef87f08300925323b62513fc3b251fabe632df43a75bc7e
+    - name: unpack zip file
+      unarchive: 
+        copy: no
+        src: /aspace/archivesspace/software/archivesspace-v1.1.2.zip
+        dest: /aspace/archivesspace/software/
+    - name: move to versioned number
+      command: mv /aspace/archivesspace/software/archivesspace /aspace/archivesspace/software/archivesspace-1.1.2
+    - name: copy mysql-connector.jar
+      command: cp /aspace/archivesspace/software/archivesspace-1.1.1/lib/mysql-connector-java-5.1.24.jar /aspace/archivesspace/software/archivesspace-1.1.2/lib/
+    - name: stop archivesspace
+      sudo: yes
+      command: monit stop all
+    - name: point to new software
+      file: 
+        path: /aspace/archivesspace/software/stable
+        src: /aspace/archivesspace/software/archivesspace-1.1.2
+        state: link
+    - name: run database upgrade for tenants
+      script: templates/aspace/run_db_migration.sh
+    - name: start archivesspace
+      sudo: yes
+      command: monit start all
