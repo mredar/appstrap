@@ -1,0 +1,8 @@
+---
+-   hosts: aspace-cluster
+    tasks:
+    - name: yum update
+      sudo: yes
+      yum:
+        name: '*'
+        state: latest
