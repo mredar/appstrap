@@ -4,7 +4,7 @@
 #
 set -eu
 
-solrVer=4.5.0
+solrVer=4.10.1
 solr=solr-$solrVer
 md5="Can't find one for solr from it's download page"
 
@@ -22,8 +22,11 @@ checksum() {	# http://stackoverflow.com/questions/1299833/bsd-md5-vs-gnu-md5sum-
 which wget	# abort now if commands I need are not installed
 # select a random mirror from mirrors.txt
 # http://www.hilarymason.com/blog/how-to-get-a-random-line-from-a-file-in-bash/
-mirror_length=`wc -l<${DIR_SCRIPT}/mirrors.txt|tr -d ' '`
-mirror=`tail -$((RANDOM/(32767/$mirror_length))) ${DIR_SCRIPT}/mirrors.txt|head -1|tr -d "\n"`
+#mirror_length=`wc -l<${DIR_SCRIPT}/mirrors.txt|tr -d ' '`
+#mirror=`tail -$((RANDOM/(32767/$mirror_length))) ${DIR_SCRIPT}/mirrors.txt|head -1|tr -d "\n"`
+#NOTE: I can't find a mirror for the archive site.
+#the mirror sites only have the latest version of solr
+mirror='http://archive.apache.org/dist'
 
 wget "$mirror/lucene/solr/$solrVer/$solr.tgz"
 tar zxf $solr.tgz
