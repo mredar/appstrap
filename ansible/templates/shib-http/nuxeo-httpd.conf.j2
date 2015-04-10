@@ -2,6 +2,10 @@
 
 {% block appstrap %}
 
+RewriteEngine On
+RewriteRule ^/{{ ansible_user_id }}/img/workspace_open.gif$ /{{ ansible_user_id }}/icons/workspace_open.gif [R]
+RewriteRule ^/{{ ansible_user_id }}/img/folder.gif$ /{{ ansible_user_id }}/icons/folder.gif [R]
+
 ProxyPass /{{ ansible_user_id }} ajp://{{ ansible_default_ipv4.address }}:8009/{{ ansible_user_id }}
 <Location "/{{ ansible_user_id }}">
         AuthType shibboleth
@@ -11,6 +15,20 @@ ProxyPass /{{ ansible_user_id }} ajp://{{ ansible_default_ipv4.address }}:8009/{
         # just in case users.httpd.txt is empty
         Require user
 </Location>
+
+# applicaiton level basic auth behind ssl
+ProxyPass /Nuxeo/site/api/v1 ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/site/api/v1
+ProxyPass /Nuxeo/nxpicsfile ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxpicsfile
+ProxyPass /Nuxeo/nxbigfile ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxbigfile
+ProxyPass /Nuxeo/site/automation ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/site/automation
+ProxyPass /Nuxeo/nxdoc ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxdoc
+ProxyPass /Nuxeo/restAPI ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/restAPI
+ProxyPassReverse /Nuxeo/site/api/v1 ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/site/api/v1
+ProxyPassReverse /Nuxeo/nxpicsfile ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxpicsfile
+ProxyPassReverse /Nuxeo/nxbigfile ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxbigfile
+ProxyPassReverse /Nuxeo/site/automation ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/site/automation
+ProxyPassReverse /Nuxeo/nxdoc ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/nxdoc
+ProxyPassReverse /Nuxeo/restAPI ajp://{{ ansible_default_ipv4.address }}:8009/nuxeo/restAPI
 
 RedirectMatch ^/$ /nuxeo/
 
