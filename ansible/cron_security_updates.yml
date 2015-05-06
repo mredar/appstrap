@@ -1,0 +1,6 @@
+---
+-   hosts: all
+    tasks:
+    - include: tasks/setvars.yml  # sets {{ role_home_dir.stdout }}
+    - include: tasks/nightly_security_updates_aws.yml
+
