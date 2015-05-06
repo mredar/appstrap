@@ -1,0 +1,13 @@
+---
+-   hosts: aspace-cluster
+    gather_facts: True         
+    vars:
+      dir_aspace_root: '/aspace/'
+    tasks:
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+      when: tenant_name == None
+    - name: delete indexer_state directory
+      sudo: yes
+      file:
+        state: absent
+        path: "{{ dir_aspace_root }}/archivesspace/tenants/{{ tenant_name }}/archivesspace/data/indexer_state"
