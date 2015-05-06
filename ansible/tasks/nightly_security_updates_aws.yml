@@ -1,0 +1,12 @@
+---
+- name: put shell script in place
+  copy: 
+    src: templates/amazon_linux_updates.sh
+    dest: ~/bin/amazon_linux_updates.sh
+    mode: 0755
+- name: create nightly cron job
+  cron:
+    name: Update security packages
+    minute: 11
+    hour: 2
+    job: "{{ role_home_dir.stdout }}/bin/amazon_linux_updates.sh"

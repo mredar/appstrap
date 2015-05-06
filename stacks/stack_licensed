@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-
-if [[ -n "$DEBUG" ]]; then 
+export DEBUG=1
+if [[ -n ${DEBUG-} ]]; then 
   set -x
 fi
 
@@ -13,39 +13,34 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )" # http://stackoverflow.c
 cd $DIR
 
 . stack_run.sh  # gives us `stack_run_batch`
-
 export LD_LIBRARY_PATH="${HOME}/pkg/lib:${HOME}/servers/shibboleth/lib"
 
 . $DIR/../setenv.sh
 
-stack_run_batch "../pmake" registry.pkgsrc.txt
+# install pkgsrc packages
+ACCEPTABLE_LICENSES=lame-license stack_run_batch "../pmake" licensed.pkgsrc.txt
+../roll_test_certs
+../cdl/get_java 
+./monit_binary  # get new monit via binary distribution
 
-# build root certificates for ssl
-if [ ! -f ${HOME}/pkg/etc/openssl/certs/mozilla-rootcert-1.pem ]; then
-    set +e
-    mozilla-rootcerts install
-    echo "cdl_build: Ignore message about 'aborting' above. Continuing..."
-    set -e
-fi
-
-pip install lxml
-pip install staller
-if [[ ! -f "${HOME}/pkg/bin/python" ]]; then
+if [[ ! -e ${HOME}/pkg/bin/python ]]; then
     ln -s ${HOME}/pkg/bin/python2.7 ${HOME}/pkg/bin/python
 fi
-../cdl/get_java
-./monit_binary
-mkdir -p ${HOME}/tmp
-../shib_it -p ${HOME}/servers/shibboleth -o ${HOME}/pkg -t ${HOME}/tmp
-../roll_test_certs
+
+easy_install-2.7 pip==1.2.1
+pip install lxml
+pip install twill
+pip install netaddr
+../jpache --prefix=${HOME}/java -f
 
 # okay, now we should have a good stack set up, let's install and configure the app!
 cd ../ansible
-./init.sh
+if [[ ! -d bin ]]; then
+  ./init.sh
+fi
 set +u
 . bin/activate
 set -u
-ansible-playbook -i host_inventory registry-playbook.yml
+ansible-playbook -i host_inventory licensed-playbook.yml
 cd
 ln -f -s appstrap/bashrc/role-account .bashrc
-
