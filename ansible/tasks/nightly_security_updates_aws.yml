@@ -1,4 +1,8 @@
 ---
+- name: make ~/bin if not exist
+  file: 
+    state: directory
+    path: ~/bin/
 - name: put shell script in place
   copy: 
     src: templates/amazon_linux_updates.sh
