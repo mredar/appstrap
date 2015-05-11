@@ -10,4 +10,3 @@ ucsc ansible_ssh_host=10.0.1.206 ansible_ssh_private_key_file=~/.ssh/aspace-clus
 uclaclark ansible_ssh_host=10.0.1.87 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucbeda ansible_ssh_host=10.0.1.234 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucsf ansible_ssh_host=10.0.1.170 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
-marktest ansible_ssh_host=10.0.1.109 ansible_ssh_private_key_file=~/.ssh/cluster.pem
