@@ -1,0 +1,25 @@
+---
+-   hosts: aspace-cluster
+    gather_facts: True         
+    vars:
+      dir_aspace_root: '/aspace'
+      dir_controllers: '{{ dir_aspace_root }}/archivesspace/software/archivesspace-1.2/plugins/local/frontend/controllers/'
+      patch_file: 'form_fix_controller.tgz'
+    tasks:
+    - debug: var=dir_controllers
+    - name: make controllers dir
+      file:
+        state: directory
+        path: '{{ dir_controllers }}'
+    - name: grab fix download
+      get_url:
+        url: https://gist.github.com/cfitz/87ec5cfa2bcd5f347949/download
+        dest: "{{ dir_controllers }}/{{ patch_file }}"
+    - name: unpack gist
+      command: tar  --strip-components=1 -xvf ./{{ patch_file }}
+      args:
+        chdir: "{{ dir_controllers }}"
+    # can't get handlers working
+    - name: restart_aspace
+      sudo: yes
+      service: name=aspace-cluster state=stopped
