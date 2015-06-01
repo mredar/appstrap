@@ -26,10 +26,11 @@ yum -y groupinstall "Development Tools"
 yum -y install python-devel
 yum -y install MySQL-python
 easy_install pip
-pip install virtualenv
+# as of 20150531, pip not on root path (/usr/local/bin)
+/usr/local/bin/pip install virtualenv
 
-pip install boto_rsync      # put this in the system python
-pip install awscli  #not sure what version is installed on ec2 image - there is
+/usr/local/bin/pip install boto_rsync      # put this in the system python
+/usr/local/bin/pip install awscli  #not sure what version is installed on ec2 image - there is
 
 #mount attached ebs
 mkfs -t ext4 /dev/sdb
