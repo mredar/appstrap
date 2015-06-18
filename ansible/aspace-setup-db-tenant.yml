@@ -1,0 +1,19 @@
+---
+-   hosts: aspace-cluster
+    gather_facts: True         
+    vars:
+      dir_aspace_root: '/aspace/'
+    tasks:
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+      when: tenant_name == None
+    - name: call and wait for stop aspace
+      shell: ls
+      notify: stop tenant aspace
+      
+    handlers:
+      - name: stop tenant aspace
+        sudo: yes
+        command: "monit stop {{tenant_name}}=aspace"
+      - name: start tenant aspace
+        sudo: yes
+        command: "monit start {{tenant_name}}=aspace"

@@ -1,0 +1,5 @@
+#handlers for starting, stopping & restarting aspace
+#
+
+name: stop aspace
+

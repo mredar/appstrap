@@ -1,0 +1,18 @@
+---
+-   hosts: 127.0.0.1
+    connection: local
+    vars:
+      db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_port: 3306
+      db_user: 'rds_aspace_admin'
+      dir_code_src: '~/code/'
+      dir_servers: '~/servers/'
+      dir_aspace_root: '/aspace/'
+      url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
+      url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
+      tenant_db_password: "{{ lookup('password', '~/.aspace/' + ansible_hostname + '/' + tenant_name + '.pswd' ) }}"
+    tasks:
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+      when: tenant_name == None
+    - name: mysqldump to <tenant>-msqldump.sql
+      shell: mysqldump  -h {{ db_server }} -P {{ db_port }} -u {{ tenant_name }} --password={{ tenant_db_password }} {{ tenant_name }}
