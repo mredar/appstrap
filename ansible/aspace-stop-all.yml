@@ -1,0 +1,10 @@
+---
+# stop all aspace servers
+-   hosts: aspace-cluster
+    gather_facts: True         
+    tasks:
+    - name: stop aspace-cluster
+      sudo: yes
+      service:
+        name: aspace-cluster
+        state: stopped
