@@ -1,0 +1,59 @@
+---
+# upgrade from current version to new version
+# must also pass following:
+# --extra-vars "tenant_db_password=<tenant_db_password>"
+# Database for tenant must be already configured.
+-   hosts: aspace-cluster
+    gather_facts: True         
+    vars:
+      db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_port: 3306
+      db_user: 'rds_aspace_admin'
+      dir_code_src: '~/code/'
+      dir_servers: '~/servers/'
+      dir_aspace_root: '/aspace/'
+      dir_aspace_root_software: '/aspace/archivesspace/software/'
+      dir_aspace_new_version: "{{ dir_aspace_root_software }}archivesspace-{{ new_version }}/"
+      url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
+      url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
+      url_mysql_connector: "https://dev.mysql.com/downloads/file.php?id=457911"
+      mysql_connector_fname_root: mysql-connector-java-
+      mysql_connector_version: 5.1.36
+    tasks:
+    - fail: msg="Set new version number with --extra-vars=\"new_version=<1.3.0>\""
+      when: new_version == None
+    - fail: msg="--extra-vars=\"sha256sum=<XXX>\""
+      when: sha256sum == None
+    - name: get archivesspace {{ new_version }} zip file
+      get_url: 
+        url: "https://github.com/archivesspace/archivesspace/releases/download/v{{ new_version }}/archivesspace-v{{ new_version }}.zip"
+        dest: "{{ dir_aspace_root_software }}archivesspace-v{{ new_version }}.zip"
+        sha256sum: "{{ sha256sum }}"
+    - name: unpack zip file
+      unarchive: 
+        copy: no
+        src: "{{ dir_aspace_root_software }}archivesspace-v{{ new_version }}.zip"
+        dest: "{{ dir_aspace_root_software }}"
+    - name: move to versioned number
+      command: 
+        free_form: "mv {{ dir_aspace_root_software }}archivesspace {{ dir_aspace_new_version }}"
+        creates: "{{ dir_aspace_new_version }}"
+    - name: copy and mysql-connector-java-<version>-bin.jar
+      # behind login wall, need to have locally
+      copy:
+        src: "files/{{ mysql_connector_fname_root }}{{ mysql_connector_version }}-bin.jar"
+        dest: "{{ dir_aspace_new_version }}/lib/"
+    - name: stop archivesspace
+      sudo: yes
+      command: monit stop all
+    - name: point to new software
+      file: 
+        path: "{{ dir_aspace_root_software }}stable"
+        src: "{{ dir_aspace_new_version }}"
+        state: link
+    - name: run database upgrade for tenants
+      script: templates/aspace/run_db_migration.sh
+    - name: start archivesspace
+      sudo: yes
+      command: monit start all
+
