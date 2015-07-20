@@ -19,7 +19,7 @@
     tasks:
     - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<tenant name>" to ansible-playbook call'
       when: tenant_name == None
-    - fail: msg='Need to set tenant database password by adding --extra-vars "tenant_db_pass=<tenant password>" to ansible-playbook call'
+    - fail: msg='Need to set tenant database password by adding --extra-vars "tenant_db_password=<tenant password>" to ansible-playbook call'
       when: tenant_db_password == None
     - name: check_appstrap
       shell: . $HOME/appstrap/setenv.sh
