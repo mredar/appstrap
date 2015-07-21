@@ -1,0 +1,16 @@
+---
+-   hosts: localhost
+    connection: local
+    gather_facts: True         
+    vars:
+      #db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_server: "aspace-smaller.crqkpkb4l2po.us-east-1.rds.amazonaws.com"
+      db_port: 3306
+      db_user: 'rds_aspace_admin'
+##      dir_code_src: '~/code/'
+##      dir_servers: '~/servers/'
+##      dir_aspace_root: '/aspace/'
+##      url_jdbc_base: "jdbc:mysql://{{ db_server }}:{{ db_port }}/"
+##      url_jdbc_suffix: '&useUnicode=true&characterEncoding=UTF-8'
+    tasks:
+    

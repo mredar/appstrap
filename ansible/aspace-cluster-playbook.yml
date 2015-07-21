@@ -3,7 +3,7 @@
     connection: local
     gather_facts: True         
     vars:
-      aspace_version: 1.2.0
+      aspace_version: 1.3.0
       aspace_dir: /aspace
     tasks:
     - name: check_appstrap
@@ -26,8 +26,7 @@
       file: path={{ aspace_dir }}/archivesspace/software/ state=directory
     - name: copy full current software stack
       synchronize: src=/home/ec2-user/code/aspace/archivesspace/ dest={{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}} recursive=yes
-    - name: links current as stable version
-      file: src={{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}} dest={{ aspace_dir }}/archivesspace/software/stable state=link
+    - include: tasks/link_version.yml
     - name: get mysql connector
       get_url: url=http://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.24/mysql-connector-java-5.1.24.jar dest={{ aspace_dir }}/archivesspace/software/stable/lib
 #    - name: enable monit interface

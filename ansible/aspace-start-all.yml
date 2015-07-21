@@ -1,9 +1,9 @@
 ---
-# stop all aspace servers
+# start all aspace servers
 -   hosts: aspace-cluster
     gather_facts: True         
     tasks:
-    - name: stop aspace-cluster
+    - name: start aspace-cluster
       sudo: yes
       service:
         name: aspace-cluster

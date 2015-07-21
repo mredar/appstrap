@@ -1,0 +1,25 @@
+---
+# Use --extra-vars "tenant_name=<new tenant name>" to the
+#ansible-playbook call to set new tenant name
+-   hosts: localhost
+    gather_facts: True         
+    vars:
+      #db_server: 'aspace.crqkpkb4l2po.us-east-1.rds.amazonaws.com'
+      db_server: "aspace-smaller.crqkpkb4l2po.us-east-1.rds.amazonaws.com"
+      db_port: 3306
+      db_user: 'rds_aspace_admin'
+    tasks:
+    - fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+      when: tenant_name == None
+    - fail: msg='Need to set tenant db pass by adding --extra-vars "tenant_db_password=<db pswd>" to ansible-playbook call'
+      when: tenant_db_password == None
+    - name: get the db master password
+      local_action: shell cat ~/.dbpass
+      register: pswd_db_master 
+    - fail: msg='No ~/.dbpass file'
+      when: pswd_db_master == None
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
+    - include: tasks/create_tenant_database.yml
+    - debug: msg="MYSQL PASSWORD FOR {{ tenant_name }} -- {{ tenant_db_password }}"
+    - debug: msg="Hostname-> {{ ansible_hostname }}"

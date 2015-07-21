@@ -1,0 +1,8 @@
+---
+-   hosts: aspace-cluster
+    connection: local
+    gather_facts: True         
+    vars:
+      aspace_dir: /aspace
+    tasks:
+    - include: tasks/link_version.yml
