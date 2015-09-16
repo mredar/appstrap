@@ -1,0 +1,17 @@
+---
+- fail:
+    msg: Set aspace_dir
+  when: aspace_dir == None
+- fail: 
+    msg: Set aspace_version
+  when: aspace_version == None
+### NOT WORKING FOR DIRECTORY LINK
+###- name: links current as stable version
+###  file:
+###    src: "{{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}}/"
+###    dest: "{{ aspace_dir }}/archivesspace/software/stable/"
+###    state: link
+###    force: yes
+- name: link version to "stable"
+  command:
+    free_form: "ln -s {{ aspace_dir }}/archivesspace/software/archivesspace-{{aspace_version}}/ {{ aspace_dir }}/archivesspace/software/stable"

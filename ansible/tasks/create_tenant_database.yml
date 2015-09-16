@@ -1,0 +1,20 @@
+---
+- fail: msg='Need to set tenant name by adding --extra-vars "tenant_name=<new tenant name>" to ansible-playbook call'
+  when: tenant_name == None
+- fail: msg='Need to set tenant db pswd by adding --extra-vars "tenant_db_password=<dp pswd>" to ansible-playbook call'
+  when: tenant_db_password == None
+- debug: var=tenant_name
+- debug: var=tenant_db_password
+- debug: var=db_user
+- debug: var=pswd_db_master
+- name: create mysql database
+  mysql_db: name={{ tenant_name }} encoding='utf8' login_host={{ db_server }} login_password={{ pswd_db_master.stdout }} login_user={{ db_user }}
+- name: create mysql user {{ tenant_name }} with PASSWORD {{ tenant_db_password }}
+  mysql_user:
+    login_host: "{{ db_server }}"
+    login_password: "{{ pswd_db_master.stdout }}"
+    login_user: "{{ db_user }}"
+    name: "{{ tenant_name }}"
+    password: "{{ tenant_db_password }}"
+    host: "%"
+    priv: "{{ tenant_name }}.*:ALL"

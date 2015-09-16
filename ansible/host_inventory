@@ -2,11 +2,13 @@ localhost              ansible_connection=local
 
 [aspace-cluster]
 aspace1 ansible_ssh_host=10.0.1.254 ansible_ssh_private_key_file=~/.ssh/cluster.pem
-ucm ansible_ssh_host=10.0.1.71 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
+ucm-old ansible_ssh_host=10.0.1.71 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
+ucm ansible_ssh_host=10.0.1.90 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucmppdc ansible_ssh_host=10.0.1.85 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
-ucr ansible_ssh_host=10.0.1.37 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
+###ucr ansible_ssh_host=10.0.1.37 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucrcmp ansible_ssh_host=10.0.1.156 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucsc ansible_ssh_host=10.0.1.206 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 uclaclark ansible_ssh_host=10.0.1.87 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucbeda ansible_ssh_host=10.0.1.234 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
 ucsf ansible_ssh_host=10.0.1.170 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
+ucsfmc ansible_ssh_host=10.0.1.4 ansible_ssh_private_key_file=~/.ssh/aspace-cluster.pem
